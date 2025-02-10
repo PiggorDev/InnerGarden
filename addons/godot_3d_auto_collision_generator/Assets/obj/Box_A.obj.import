@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b2qng74g03nej"
+path="res://.godot/imported/Box_A.obj-fbd74cbe58457b1a41c4628f6a2509f2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Box_A.obj-fbd74cbe58457b1a41c4628f6a2509f2.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Box_A.obj"
+dest_files=["res://.godot/imported/Box_A.obj-fbd74cbe58457b1a41c4628f6a2509f2.mesh", "res://.godot/imported/Box_A.obj-fbd74cbe58457b1a41c4628f6a2509f2.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

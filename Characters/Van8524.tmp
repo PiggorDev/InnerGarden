@@ -1,0 +1,157 @@
+[gd_scene load_steps=13 format=3 uid="uid://bo4pmx7ls8252"]
+
+[ext_resource type="Script" path="res://Scripts/vanessa.gd" id="1_jl3ec"]
+[ext_resource type="PackedScene" uid="uid://dtwtcmhowblb4" path="res://Mechanics/Crosshair.tscn" id="2_70ow0"]
+[ext_resource type="Script" path="res://Characters/Vanessacamera_3d.gd" id="5_r6440"]
+[ext_resource type="Texture2D" uid="uid://b62utqgrciavk" path="res://Sprites/VanessaBIG.png" id="6_yt7xl"]
+[ext_resource type="Script" path="res://shadow_handler.gd" id="7_wqo6m"]
+[ext_resource type="Texture2D" uid="uid://csvc5giw0d7wf" path="res://Sprites/pngtree-cute-comic-pop-art-pow-bubble-png-image_12925655.png" id="8_d6o2h"]
+[ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="8_rnr2a"]
+[ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="9_6hhcc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kya60"]
+size = Vector3(1, 1.7, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u8l8h"]
+size = Vector3(1, 1, 2.96)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_layw8"]
+radius = 0.4
+height = 1.85
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_stkjb"]
+size = Vector3(8, 7, 8)
+
+[node name="Vanessa" type="CharacterBody3D" groups=["Player"]]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 18, 0, 9)
+floor_block_on_wall = false
+floor_max_angle = 1.22173
+floor_snap_length = 1.0
+script = ExtResource("1_jl3ec")
+step_check_distance = 1.0
+speed = 12.0
+run_speed = 17.0
+wall_jump_horizontal_force = -15.0
+coyote_time_duration = 0.3
+dash_speed = 40.0
+crosshair_scene = ExtResource("2_70ow0")
+targeting_radius = 40.0
+shoot_cooldown = 0.2
+max_charge_time = 0.5
+projectile_enabled = false
+input_cooldown = 0.0
+dash_input_window = 0.5
+
+[node name="VanessaCamera3D" type="Camera3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(4.34783, 0, 0, 0, 3.07438, 3.07438, 0, -3.07438, 3.07438, 0, 10, 10)
+script = ExtResource("5_r6440")
+player = NodePath("..")
+offset_distance = 15.0
+height = 10.0
+
+[node name="RayCast3D" type="RayCast3D" parent="VanessaCamera3D"]
+transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)
+visible = false
+
+[node name="Transparency1" type="Area3D" parent="VanessaCamera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0.424264, -3.81838)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VanessaCamera3D/Transparency1"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.441292, 0.709977)
+shape = SubResource("BoxShape3D_kya60")
+
+[node name="Transparency2" type="Area3D" parent="VanessaCamera3D"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VanessaCamera3D/Transparency2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.41421)
+shape = SubResource("BoxShape3D_u8l8h")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(3.17, 0, 0, 0, 3.17, 0, 0, 0, 3.17, 0, 0, 0)
+texture = ExtResource("6_yt7xl")
+
+[node name="ShootOrigin" type="Node3D" parent="."]
+
+[node name="VanessaShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_layw8")
+
+[node name="WallRayCastFront" type="RayCast3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, -2, 0, 2, -8.74228e-08, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastRight" type="RayCast3D" parent="."]
+transform = Transform3D(-8.74228e-08, -2, 0, 2, -8.74228e-08, 0, 0, 0, 2, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastLeft" type="RayCast3D" parent="."]
+transform = Transform3D(8.74228e-08, 2, 1.74846e-07, 2, -8.74228e-08, -3.86165e-15, 3.7811e-15, 1.74846e-07, -2, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastBack" type="RayCast3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, -8.74228e-08, 2, 0, -2, -8.74228e-08, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="ChargeLight" type="OmniLight3D" parent="."]
+visible = false
+light_color = Color(0.712165, 0.695261, 0.984159, 1)
+light_energy = 3.134
+light_indirect_energy = 3.804
+
+[node name="StepRayCast" type="RayCast3D" parent="."]
+transform = Transform3D(17.17, 0, 0, 0, 3.47276, 2.005, 0, -2.005, 3.47276, 0, -2.4, 1.6)
+target_position = Vector3(0, -1, 0.5)
+debug_shape_custom_color = Color(0.875511, 0.0693618, 0.499633, 1)
+
+[node name="ShadowHandler" type="Node3D" parent="."]
+transform = Transform3D(1.2, 0, 0, 0, -5.24537e-08, 1.2, 0, -1.2, -5.24537e-08, 0, -3.6, 0)
+script = ExtResource("7_wqo6m")
+shadow_texture = ExtResource("8_rnr2a")
+max_height = 20.0
+min_scale = 0.01
+max_scale = 1.0
+
+[node name="ShadowRayCast" type="RayCast3D" parent="ShadowHandler"]
+transform = Transform3D(6.6, 0, 0, 0, -3.64262e-06, -8.00833, 0, 83.3333, -3.50055e-07, 0, 0, 0)
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="ShadowSprite" type="Sprite3D" parent="ShadowHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, -3.55271e-15, 0, 3.55271e-15, 1, 0, 0, 0)
+modulate = Color(0.541176, 0.47451, 0.309804, 0.74902)
+axis = 1
+billboard = 2
+texture = ExtResource("9_6hhcc")
+
+[node name="eyes" type="Node3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0.1, 1.2, 0)
+
+[node name="PunchLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -3.8)
+visible = false
+light_color = Color(1, 0.271524, 0.566444, 1)
+light_energy = 4.299
+omni_range = 3.0
+omni_attenuation = 2.237
+
+[node name="PunchEffect" type="Sprite3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.4, -3.8)
+billboard = 2
+texture = ExtResource("8_d6o2h")
+
+[node name="PunchAOE" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -3.5)
+
+[node name="Punch AOE" type="CollisionShape3D" parent="PunchAOE"]
+shape = SubResource("BoxShape3D_stkjb")
+
+[connection signal="body_entered" from="VanessaCamera3D/Transparency1" to="VanessaCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="VanessaCamera3D/Transparency1" to="VanessaCamera3D" method="_on_body_exited_area"]
+[connection signal="body_entered" from="VanessaCamera3D/Transparency2" to="VanessaCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="VanessaCamera3D/Transparency2" to="VanessaCamera3D" method="_on_body_exited_area"]

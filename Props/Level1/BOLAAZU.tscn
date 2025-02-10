@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://b4fg1kjvanoah"]
+
+[ext_resource type="Script" path="res://Props/Level1/bolaazu.gd" id="1_1xdog"]
+[ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="1_yhuw4"]
+[ext_resource type="Texture2D" uid="uid://bi45mg3omibd3" path="res://Sprites/BIGBoom.png" id="3_mwnc1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_a3lie"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p6d6h"]
+albedo_color = Color(0.545371, 0.709051, 1, 1)
+albedo_texture = ExtResource("1_yhuw4")
+
+[node name="Area3D" type="Area3D"]
+script = ExtResource("1_1xdog")
+speed = 30.0
+lifetime = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_a3lie")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_p6d6h")
+amount = 100
+lifetime = 2.0
+scale_amount_min = 272.84
+scale_amount_max = 272.84
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("3_mwnc1")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(9.62615e-08, 0.728009, 0.702148, 1)
+light_energy = 5.0
+distance_fade_enabled = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

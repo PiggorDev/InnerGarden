@@ -1,0 +1,121 @@
+[gd_scene load_steps=10 format=3 uid="uid://coe5qxbkg7ws8"]
+
+[ext_resource type="Script" path="res://Characters/soul.gd" id="1_bcjs5"]
+[ext_resource type="Script" path="res://Characters/soul_camera_3d.gd" id="2_w6n0p"]
+[ext_resource type="Texture2D" uid="uid://du8timc0bl2qy" path="res://Sprites/Soul.png" id="6_n1w8g"]
+[ext_resource type="Script" path="res://shadow_handler.gd" id="7_ekch4"]
+[ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="8_y46yf"]
+[ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="9_odws7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vab18"]
+size = Vector3(1, 1.7, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cfmd4"]
+size = Vector3(1, 1, 2.96)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wsaul"]
+margin = 0.0
+radius = 1.5
+height = 8.0
+
+[node name="Soul" type="CharacterBody3D" groups=["Player"]]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 22.4, -5.2, -4.2)
+floor_block_on_wall = false
+floor_max_angle = 1.22173
+floor_snap_length = 1.0
+script = ExtResource("1_bcjs5")
+
+[node name="SoulCamera3D" type="Camera3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(4.34783, 0, 0, 0, 3.07438, 3.07438, 0, -3.07438, 3.07438, 0, 10, 10)
+script = ExtResource("2_w6n0p")
+player = NodePath("..")
+offset_distance = 15.0
+height = 10.0
+
+[node name="RayCast3D" type="RayCast3D" parent="SoulCamera3D"]
+transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)
+visible = false
+
+[node name="Transparency" type="Area3D" parent="SoulCamera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0.424264, -3.81838)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SoulCamera3D/Transparency"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.441292, 0.709977)
+shape = SubResource("BoxShape3D_vab18")
+
+[node name="Transparency2" type="Area3D" parent="SoulCamera3D"]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SoulCamera3D/Transparency2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.41421)
+shape = SubResource("BoxShape3D_cfmd4")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(3.17, 0, 0, 0, 3.17, 0, 0, 0, 3.17, 0, 0, 0)
+texture = ExtResource("6_n1w8g")
+
+[node name="IteminHand" type="Sprite3D" parent="Sprite3D"]
+transform = Transform3D(2.52366, 0, 0, 0, 2.52366, 6.01687e-08, 0, -6.01687e-08, 2.52366, -0.37855, 0.378549, -0.126183)
+billboard = 2
+alpha_cut = 1
+texture_filter = 2
+render_priority = 1
+
+[node name="ShootOrigin" type="Node3D" parent="."]
+
+[node name="SoulShape" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_wsaul")
+
+[node name="WallRayCastFront" type="RayCast3D" parent="."]
+transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastRight" type="RayCast3D" parent="."]
+transform = Transform3D(-1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, 0, 0, 2.3, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastLeft" type="RayCast3D" parent="."]
+transform = Transform3D(1.00536e-07, 2.3, 3.4729e-07, 2.3, -1.00536e-07, -4.44091e-15, 1.07396e-14, 3.4729e-07, -2.3, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="WallRayCastBack" type="RayCast3D" parent="."]
+transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, 2.3, 0, -2.3, -1.00536e-07, 0, -3.47826, 0)
+debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
+debug_shape_thickness = 5
+
+[node name="ChargeLight" type="OmniLight3D" parent="."]
+visible = false
+light_color = Color(0.712165, 0.695261, 0.984159, 1)
+light_energy = 3.134
+light_indirect_energy = 3.804
+
+[node name="ShadowHandler" type="Node3D" parent="."]
+transform = Transform3D(1.2, 0, 0, 0, -5.24537e-08, 1.2, 0, -1.2, -5.24537e-08, 0, -3.6, 0)
+script = ExtResource("7_ekch4")
+shadow_texture = ExtResource("8_y46yf")
+max_height = 20.0
+min_scale = 0.01
+max_scale = 1.0
+
+[node name="ShadowRayCast" type="RayCast3D" parent="ShadowHandler"]
+transform = Transform3D(6.6, 0, 0, 0, -3.64262e-06, -8.00833, 0, 83.3333, -3.50055e-07, 0, 0, 0)
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="ShadowSprite" type="Sprite3D" parent="ShadowHandler"]
+transform = Transform3D(1, 0, 0, 0, 1, -3.55271e-15, 0, 3.55271e-15, 1, 0, 0, 0)
+modulate = Color(0.541176, 0.47451, 0.309804, 0.74902)
+axis = 1
+billboard = 2
+texture = ExtResource("9_odws7")
+
+[node name="eyes" type="Node3D" parent="."]
+
+[connection signal="body_entered" from="SoulCamera3D/Transparency" to="SoulCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="SoulCamera3D/Transparency" to="SoulCamera3D" method="_on_body_exited_area"]
+[connection signal="body_entered" from="SoulCamera3D/Transparency2" to="SoulCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="SoulCamera3D/Transparency2" to="SoulCamera3D" method="_on_body_exited_area"]

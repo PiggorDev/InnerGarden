@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6odjgdxlgfdc"]
+
+[ext_resource type="Script" path="res://Scripts/projectile.gd" id="1_iyw8e"]
+[ext_resource type="Texture2D" uid="uid://bi45mg3omibd3" path="res://Sprites/BIGBoom.png" id="2_3cnhi"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_n0h0l"]
+radius = 0.816161
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_iyw8e")
+speed = 20.0
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0.2, -0.7, 0.0477137)
+shape = SubResource("SphereShape3D_n0h0l")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("2_3cnhi")

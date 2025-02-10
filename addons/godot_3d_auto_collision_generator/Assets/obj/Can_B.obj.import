@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bsyhc7ivucr72"
+path="res://.godot/imported/Can_B.obj-02b6fed74db59da8ec229f9f59fcc2e5.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Can_B.obj-02b6fed74db59da8ec229f9f59fcc2e5.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Can_B.obj"
+dest_files=["res://.godot/imported/Can_B.obj-02b6fed74db59da8ec229f9f59fcc2e5.mesh", "res://.godot/imported/Can_B.obj-02b6fed74db59da8ec229f9f59fcc2e5.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
