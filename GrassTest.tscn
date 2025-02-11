@@ -163,7 +163,7 @@ size = Vector3(8.5, 8.5, 9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_li0cr"]
 size = Vector3(0.0881299, 0.12, 0.086457)
 
-[node name="Node3D" type="Node3D" groups=["Enemy"]]
+[node name="Node3D" type="Node3D"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("1_l0vgl")
@@ -467,7 +467,7 @@ position = Vector2(150, 100)
 texture = ExtResource("4_ntemd")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 12, -8, 0)
 shadow_enabled = true
 
 [node name="block-moving2" type="Node3D" parent="." groups=["MovingPlatform"]]
@@ -508,7 +508,10 @@ shape = SubResource("BoxShape3D_vvhxa")
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -2, -4.2435, -5.3)
 
 [node name="block-grass-overhang-large-tall2" parent="Organizador" instance=ExtResource("1_lcs3a")]
-transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 13.0435, -7.63696, -7.3913)
+transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 15.5435, -13.887, -42.3913)
+
+[node name="block-grass-overhang-large-tall3" parent="Organizador" instance=ExtResource("1_lcs3a")]
+transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 6.7935, -11.387, -42.3913)
 
 [node name="block-grass-large5" parent="Organizador" instance=ExtResource("2_75jt2")]
 transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 39.0435, -4.63696, 1.30435)
@@ -750,7 +753,7 @@ spot_range = 7.046
 spot_angle = 32.01
 
 [node name="HikaruEvil" parent="." instance=ExtResource("28_nfrb8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -5.5, -6)
 
 [node name="PapoulaNegra" type="Area3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 43.1, -6.7, -15.3)
@@ -783,6 +786,7 @@ transform = Transform3D(1.19209e-07, 0, 6.58653, 0, 0.977392, 0, -4.83479, 0, 2.
 wall_jump_upward_speed = -15.0
 wall_jump_horizontal_force = -15.0
 umbrella_jump_boost = 40.0
+acceleration_time = 0.01
 dash_speed = 40.0
 shoot_cooldown = 0.15
 max_charge_time = 0.5

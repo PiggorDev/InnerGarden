@@ -89,6 +89,9 @@ func _input(event):
 		toggle_character()
 		
 func toggle_character():
+	# Salva o estado atual da câmera antes de trocar
+	var previous_camera_mode = $"../Camera Switch".current_camera_mode
+
 	if current_character == 0:
 		# Trocar de Libu para Vanessa
 		current_character = 1
@@ -98,33 +101,28 @@ func toggle_character():
 			libu.disable_combat()
 			deactivate_character(libu)
 			libu.reset_shooting_state()
-			libu.hide_all_life_bars()  # Oculta as barras de vida da Libu
+			libu.hide_all_life_bars()
 			if libu_camera:
-				libu_camera.current = false  # Desativa a câmera da Libu
+				libu_camera.current = false
 
 		# Instanciar a Vanessa se ainda não estiver na cena
 		if vanessa_instance == null:
 			vanessa_instance = vanessa_scene.instantiate()
 			get_parent().add_child(vanessa_instance)
 			vanessa_instance.global_transform = libu.global_transform
-
-			# Referenciar a câmera da Vanessa
 			vanessa_camera = vanessa_instance.get_node("VanessaCamera3D")
-			if vanessa_camera:
-				print("Câmera da Vanessa configurada.")
-			else:
-				print("Erro: VanessaCamera3D não encontrada na cena da Vanessa!")
 
 		# Mostrar barras de vida da Vanessa e ativar a câmera
 		if vanessa_instance:
 			activate_character(vanessa_instance)
 			vanessa_instance.enable_combat()
 			vanessa_instance.reset_shooting_state()
-			vanessa_instance.show_all_life_bars()  # Mostra as barras de vida da Vanessa
+			vanessa_instance.show_all_life_bars()
 			if vanessa_camera:
-				vanessa_camera.current = true  # Ativa a câmera da Vanessa
+				vanessa_camera.current = true
 
 		print("Switched to Vanessa")
+
 	else:
 		# Trocar de Vanessa para Libu
 		current_character = 0
@@ -134,28 +132,29 @@ func toggle_character():
 			vanessa_instance.disable_combat()
 			deactivate_character(vanessa_instance)
 			vanessa_instance.reset_shooting_state()
-			vanessa_instance.hide_all_life_bars()  # Oculta as barras de vida da Vanessa
+			vanessa_instance.hide_all_life_bars()
 			if vanessa_camera:
-				vanessa_camera.current = false  # Desativa a câmera da Vanessa
+				vanessa_camera.current = false
 
 		# Mostrar barras de vida da Libu e ativar a câmera
 		if libu:
 			activate_character(libu)
 			libu.enable_combat()
 			libu.reset_shooting_state()
-			libu.show_all_life_bars()  # Mostra as barras de vida da Libu
+			libu.show_all_life_bars()
 			if libu_camera:
-				libu_camera.current = true  # Ativa a câmera da Libu
+				libu_camera.current = true
 
 		# Remover a instância da Vanessa, se necessário
 		if vanessa_instance:
 			vanessa_instance.queue_free()
 			vanessa_instance = null
-			vanessa_camera = null  # Limpa a referência da câmera da Vanessa
+			vanessa_camera = null
 
 		print("Switched to Libu")
 
-	update_camera()
+	# 🔹 Sincroniza a câmera do novo personagem com o estado anterior
+	sync_camera_state(previous_camera_mode)
 
 
 func deactivate_character(character):

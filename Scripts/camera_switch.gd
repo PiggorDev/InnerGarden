@@ -44,15 +44,15 @@ func update_camera_state():
 	var active_camera = null
 	if character_switch.current_character == 0:  # Libu
 		active_camera = libu_camera
-	elif character_switch.vanessa_camera:  # Vanessa
+	elif character_switch.current_character == 1:  # Vanessa
 		active_camera = character_switch.vanessa_camera
 
 	if active_camera == null:
 		print("Erro: Câmera ativa não encontrada!")
 		return
 
-	# Atualiza o estado da câmera
-	if current_camera_mode == 0:  # Modo Normal
+	# Atualiza o estado da câmera e controla a visibilidade da mira
+	if current_camera_mode == 0:  # Modo Normal (terceira pessoa)
 		active_camera.deactivate_side_scroll()
 		active_camera.deactivate_first_person()
 		crosshair.visible = false  # Desativa a mira

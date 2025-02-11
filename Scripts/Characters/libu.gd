@@ -295,8 +295,9 @@ func find_target():
 			if distance <= targeting_radius:
 				nearby_enemies.append(enemy)
 
-	if nearby_enemies.size() == 0:
-		clear_target()  # Nenhum inimigo próximo
+	# **Se não há inimigos, oculta a mira e sai da função**
+	if nearby_enemies.is_empty():
+		clear_target()
 		return
 
 	# Escolhe o inimigo mais próximo
@@ -311,7 +312,7 @@ func find_target():
 	if closest_enemy:
 		current_target = closest_enemy
 
-		# Certifica que a instância do crosshair é válida antes de usá-la
+		# Verifica se a instância do crosshair é válida antes de ativá-la
 		if is_instance_valid(crosshair_instance):
 			crosshair_instance.visible = true
 			crosshair_instance.global_transform.origin = current_target.global_transform.origin
@@ -394,12 +395,16 @@ func handle_crosshair(_delta):
 
 func clear_target():
 	current_target = null
+	
+	# Garante que a mira desapareça se não houver um alvo válido
 	if is_instance_valid(crosshair_instance):
 		crosshair_instance.visible = false
+		# Define a posição da mira para um local seguro (fora da tela ou no centro da câmera)
+		crosshair_instance.global_transform.origin = Vector3.ZERO  
 		print("Mira desativada.")
 	else:
 		print("crosshair_instance já foi liberado.")
-	
+
 func _physics_process(delta):
 	if is_inventory_open:
 		velocity = Vector3.ZERO  # Garante que o personagem não se mova
@@ -663,47 +668,42 @@ func shoot_projectile():
 		if is_first_person_active:
 			var camera = get_viewport().get_camera_3d()
 			if camera:
-				# Obtém o tamanho do viewport e calcula o centro da tela
-				var viewport_size = get_viewport().get_visible_rect().size
-				var screen_center = viewport_size / 2
-
-				# Calcula a origem e direção do tiro com base no centro do viewport
-				var ray_origin: Vector3 = camera.project_ray_origin(screen_center)
-				var ray_direction: Vector3 = camera.project_ray_normal(screen_center).normalized()
-
-				# Ajusta a posição inicial do projétil (fora da câmera) e define a direção
-				var offset = 2.0  # Ajuste para evitar que o projétil saia "dentro" da câmera
-				projectile.global_transform.origin = ray_origin + ray_direction * offset
-				projectile.set_velocity(ray_direction)
-
-				print("Tiro em primeira pessoa:")
-				print("Origem do raio:", ray_origin)
-				print("Direção do raio:", ray_direction)
-			else:
-				print("Erro: Nenhuma câmera ativa encontrada!")
+				# Origem do tiro: um pouco à frente da câmera
+				projectile.global_transform.origin = camera.global_transform.origin + camera.global_transform.basis.z * -1.5
+				
+				# **Se há um alvo, o projétil segue ele**
+				if current_target and current_target.is_inside_tree():
+					projectile.set_target(current_target)  # 🔥 Torna o tiro teleguiado
+				else:
+					# Direção da câmera caso não tenha alvo
+					var shoot_direction = -camera.global_transform.basis.z.normalized()
+					projectile.set_velocity(shoot_direction)
 		else:
-			# Lógica para outros modos (não FPS)
+			# Caso não esteja em primeira pessoa, usa a lógica padrão
+			projectile.global_transform.origin = shoot_origin.global_transform.origin
+
 			if current_target and current_target.is_inside_tree():
-				projectile.global_transform.origin = shoot_origin.global_transform.origin
-				projectile.set_target(current_target)
+				projectile.set_target(current_target)  # 🔥 Mantém o alvo para seguir!
 			else:
 				var shoot_direction = last_direction
 				shoot_direction.y = 0
 				shoot_direction = shoot_direction.normalized()
-				projectile.global_transform.origin = shoot_origin.global_transform.origin
 				projectile.set_velocity(shoot_direction)
+
+		# Configurações do projétil
+		projectile.damage = 2
+		projectile.scale = Vector3(1.2, 1.2, 1.2)
 
 		# Ignora colisões com o jogador
 		if projectile.has_method("add_exception"):
 			projectile.add_exception(self)
 
 		# Reseta o cooldown
-		# Reseta o cooldown
 		time_since_last_shot = shoot_cooldown
 		print("Projétil disparado.")
 	else:
-		print("Cena de projétil não configurada!")
-		
+		print("Debug: Cena de projétil não configurada!")
+
 func _on_projectile_body_entered(body):
 	if body.name == "HikaruEvil":  # Verifica se o objeto atingido é o Hikaru
 		body.take_damage()
