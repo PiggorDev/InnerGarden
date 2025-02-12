@@ -14,8 +14,7 @@ extends CharacterBody3D
 @onready var collision_shape = $LibuShape  # Substitua pelo caminho correto para o CollisionShape3D
 @onready var camera = $LibuCamera3D  # Atualize para o caminho correto
 # Velocidades
-@export var step_height: float = 1.0  # Altura máxima do obstáculo para subir automaticamente
-@export var step_check_distance: float = 0.5  # Distância horizontal para verificar o step offset
+
 @export var walk_speed: float = 5.0  # Velocidade ao andar normalmente
 @export var run_speed: float = 10.0
 @export var gravity: float = -20.0
@@ -691,8 +690,8 @@ func shoot_projectile():
 				projectile.set_velocity(shoot_direction)
 
 		# Configurações do projétil
-		projectile.damage = 2
-		projectile.scale = Vector3(1.2, 1.2, 1.2)
+		projectile.damage = 1
+		projectile.scale = Vector3(1, 1, 1)
 
 		# Ignora colisões com o jogador
 		if projectile.has_method("add_exception"):

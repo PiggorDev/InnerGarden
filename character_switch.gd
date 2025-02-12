@@ -22,8 +22,21 @@ var current_character: int = 0        # 0 = Libu, 1 = Vanessa
 
 var camera_node: Node = null
 
+var libu_health: int = 2  # Vida inicial da Libu
+var vanessa_health: int = 4  # Vida inicial da Vanessa
+
+
 func _ready():
 	base_position = global_transform.origin
+
+
+	if libu:
+		libu_health = libu.current_health
+		libu.update_life_bar()
+
+	if vanessa_instance:
+		vanessa_health = vanessa_instance.current_health
+		vanessa_instance.update_life_bar()
 
 	# Exibir a Libu e configurar sua HUD
 	if libu:
@@ -93,6 +106,9 @@ func toggle_character():
 	var previous_camera_mode = $"../Camera Switch".current_camera_mode
 
 	if current_character == 0:
+		# Salve a vida atual da Libu
+		if libu:
+			libu_health = libu.current_health
 		# Trocar de Libu para Vanessa
 		current_character = 1
 
@@ -120,10 +136,19 @@ func toggle_character():
 			vanessa_instance.show_all_life_bars()
 			if vanessa_camera:
 				vanessa_camera.current = true
+				
+		# Sincronize a vida de Vanessa
+		if vanessa_instance:
+			vanessa_instance.current_health = vanessa_health
+			vanessa_instance.update_life_bar()
 
 		print("Switched to Vanessa")
 
 	else:
+		
+		# Salve a vida atual da Vanessa
+		if vanessa_instance:
+			vanessa_health = vanessa_instance.current_health
 		# Trocar de Vanessa para Libu
 		current_character = 0
 
