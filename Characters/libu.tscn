@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://Scripts/Characters/libu.gd" id="1_0isec"]
 [ext_resource type="Script" path="res://Scripts/camera_3d.gd" id="2_ibpu5"]
 [ext_resource type="PackedScene" uid="uid://dtwtcmhowblb4" path="res://Mechanics/Crosshair.tscn" id="2_jh1w3"]
-[ext_resource type="Texture2D" uid="uid://bar7ibcehmwqx" path="res://Sprites/LibuBigProt.png" id="3_0m612"]
 [ext_resource type="PackedScene" uid="uid://b4fg1kjvanoah" path="res://Props/Level1/BOLAAZU.tscn" id="3_b0ant"]
 [ext_resource type="Script" path="res://shadow_handler.gd" id="4_6pc02"]
 [ext_resource type="PackedScene" uid="uid://dmpm1ekhycsqp" path="res://Assets/TreeMade/Charged Project.tscn" id="4_mhi7e"]
 [ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="5_xd0lu"]
+[ext_resource type="Texture2D" uid="uid://c4jxvnib70416" path="res://Sprites/LibuDraw/LibuTest.png" id="6_c6jqc"]
 [ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="6_j0tps"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fnhhq"]
@@ -63,11 +63,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.41421)
 shape = SubResource("BoxShape3D_1bcdb")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(3.17, 0, 0, 0, 3.17, 0, 0, 0, 3.17, 0, 0, 0)
-texture = ExtResource("3_0m612")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.7, 0)
+gi_mode = 2
+gi_lightmap_scale = 3
+billboard = 2
+shaded = true
+alpha_cut = 1
+alpha_antialiasing_edge = 1.0
+texture_filter = 1
+render_priority = 4
+texture = ExtResource("6_c6jqc")
 
 [node name="IteminHand" type="Sprite3D" parent="Sprite3D"]
-transform = Transform3D(2.52366, 0, 0, 0, 2.52366, 6.01687e-08, 0, -6.01687e-08, 2.52366, -0.37855, 0.378549, -0.126183)
+transform = Transform3D(15.664, 0, 0, 0, 15.664, 3.73459e-07, 0, -3.73459e-07, 15.664, 2.16098, 2.91824, -0.126183)
 billboard = 2
 alpha_cut = 1
 texture_filter = 2
