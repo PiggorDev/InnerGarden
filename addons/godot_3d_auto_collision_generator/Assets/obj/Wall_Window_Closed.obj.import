@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ckechfmncj513"
+path="res://.godot/imported/Wall_Window_Closed.obj-750e71ce333331e6f7861a198385dc02.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Wall_Window_Closed.obj-750e71ce333331e6f7861a198385dc02.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Wall_Window_Closed.obj"
+dest_files=["res://.godot/imported/Wall_Window_Closed.obj-750e71ce333331e6f7861a198385dc02.mesh", "res://.godot/imported/Wall_Window_Closed.obj-750e71ce333331e6f7861a198385dc02.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

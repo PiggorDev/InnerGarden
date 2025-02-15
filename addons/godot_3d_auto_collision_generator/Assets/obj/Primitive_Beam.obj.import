@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bm63c40ljx44u"
+path="res://.godot/imported/Primitive_Beam.obj-c7ad6cb657aa66f193eb6fb2af9e1795.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Primitive_Beam.obj-c7ad6cb657aa66f193eb6fb2af9e1795.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Primitive_Beam.obj"
+dest_files=["res://.godot/imported/Primitive_Beam.obj-c7ad6cb657aa66f193eb6fb2af9e1795.mesh", "res://.godot/imported/Primitive_Beam.obj-c7ad6cb657aa66f193eb6fb2af9e1795.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

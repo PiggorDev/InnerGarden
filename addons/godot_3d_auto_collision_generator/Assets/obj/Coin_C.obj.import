@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://disfyygujpxa7"
+path="res://.godot/imported/Coin_C.obj-204bc37837c853735c80d66dbea128ca.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Coin_C.obj-204bc37837c853735c80d66dbea128ca.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Coin_C.obj"
+dest_files=["res://.godot/imported/Coin_C.obj-204bc37837c853735c80d66dbea128ca.mesh", "res://.godot/imported/Coin_C.obj-204bc37837c853735c80d66dbea128ca.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

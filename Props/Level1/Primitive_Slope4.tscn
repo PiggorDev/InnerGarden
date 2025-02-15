@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=4 uid="uid://c8ojknhbqs6k8"]
+
+[ext_resource type="Texture2D" uid="uid://crmmru78iwgcy" path="res://Assets/gltf/prototypebits_texture.png" id="1_a8gll"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1fgoa"]
+resource_name = "prototype_texture"
+albedo_texture = ExtResource("1_a8gll")
+roughness = 0.4
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_f5sfl"]
+_surfaces = [{
+"aabb": AABB(-2, 1.49012e-07, -2, 4, 4, 4),
+"format": 34359742465,
+"index_count": 24,
+"index_data": PackedByteArray("BAAFAAMAAQADAAAAAQAEAAMAAgADAAUAAgAAAAMAAQAAAAIAAQAFAAQAAQACAAUA"),
+"name": "prototype_texture",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAAQAAAIDT///8/////vwEAgEAAAABA////vwAAIDQAAABA////PwAAIDQAAADAAAAAwAEAgED///+/AAAAwAAAIDT///+/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5pe5o"]
+resource_name = "Primitive_Slope_Cube_16424"
+_surfaces = [{
+"aabb": AABB(-2, 1.49012e-07, -2, 4, 4, 4),
+"attribute_data": PackedByteArray("8DzHPZg8Rz7wPMc9mDxHPvA8xz2YPGc+QAzjPKAMYz1ADOM8oAxjPUAM4zygDGM9QAzjPJg8Rz5ADOM8mDxHPkAM4zyYPGc+8DzHPZg8Rz7wPMc9mDxHPvA8xz2YPGc+QAzjPKAMYz1ADOM8oAxjPUAM4zygDGM9QAzjPJg8Rz5ADOM8mDxHPkAM4zyYPGc+"),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("DQAQAAkABQAKAAEABQAOAAoACAALABEACAACAAsABAAAAAcAAwAPAAwAAwAGAA8A"),
+"material": SubResource("StandardMaterial3D_1fgoa"),
+"name": "prototype_texture",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("AAAAQAAAIDT///8/AAAAQAAAIDT///8/AAAAQAAAIDT///8/////vwEAgEAAAABA////vwEAgEAAAABA////vwEAgEAAAABA////vwAAIDQAAABA////vwAAIDQAAABA////vwAAIDQAAABA////PwAAIDQAAADA////PwAAIDQAAADA////PwAAIDQAAADAAAAAwAEAgED///+/AAAAwAEAgED///+/AAAAwAEAgED///+/AAAAwAAAIDT///+/AAAAwAAAIDT///+/AAAAwAAAIDT///+//3//f////7//v/+/////v/9/AAD///+/AAD/f////z//f/9/////v/+//7////+/AAD/f////z//f/9/////v/9/AAD///+/AAD//////z//v/+/////v/9/AAD///+/AAD/f////z8AAP//////P/+//7////+/AAD/f////z8AAP//////P/9/AAD///+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_f5sfl")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_23jlc"]
+points = PackedVector3Array(2, 1.49012e-07, 2, 2, 1.49012e-07, 2, 2, 1.49012e-07, 2, -2, 4, 2, -2, 4, 2, -2, 4, 2, -2, 1.49012e-07, 2, -2, 1.49012e-07, 2, -2, 1.49012e-07, 2, 2, 1.49012e-07, -2, 2, 1.49012e-07, -2, 2, 1.49012e-07, -2, -2, 4, -2, -2, 4, -2, -2, 4, -2, -2, 1.49012e-07, -2, -2, 1.49012e-07, -2, -2, 1.49012e-07, -2)
+
+[node name="Primitive_Slope4" type="MeshInstance3D"]
+transform = Transform3D(-2.20484e-07, 0, -4.94476, 0, 1.03747, 0, 5.04407, 0, -2.16142e-07, 0, 0, 0)
+mesh = SubResource("ArrayMesh_5pe5o")
+skeleton = NodePath("")
+
+[node name="Primitive_Slope4_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Primitive_Slope4_col"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+shape = SubResource("ConvexPolygonShape3D_23jlc")

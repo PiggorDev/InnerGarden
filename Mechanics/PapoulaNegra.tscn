@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7sajkykts1k7"]
+
+[ext_resource type="Script" path="res://PapoulaNegra.gd" id="1_qgenq"]
+[ext_resource type="Texture2D" uid="uid://dwj1c6rh7mht0" path="res://Sprites/papoulanegra.png" id="2_yshhp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_li0cr"]
+size = Vector3(0.0881299, 0.12, 0.086457)
+
+[node name="PapoulaNegra" type="Area3D"]
+script = ExtResource("1_qgenq")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+alpha_cut = 1
+texture_filter = 0
+texture = ExtResource("2_yshhp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00328857, 0, 0.000716798)
+shape = SubResource("BoxShape3D_li0cr")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.681944, 0.631283, 0.983119, 1)
+light_energy = 3.804
+light_size = 0.247
+omni_range = 0.557913

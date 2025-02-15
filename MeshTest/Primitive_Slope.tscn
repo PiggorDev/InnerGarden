@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=4 uid="uid://csdorg2race5d"]
+
+[ext_resource type="Texture2D" uid="uid://dxbnrycc4qgn3" path="res://addons/godot_3d_auto_collision_generator/Assets/fbx/prototypebits_texture.png" id="1_t0nb5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wmy1s"]
+resource_name = "prototype_texture"
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 1)
+albedo_texture = ExtResource("1_t0nb5")
+emission_enabled = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rsimf"]
+_surfaces = [{
+"aabb": AABB(-0.02, -0.02, 1.49012e-09, 0.04, 0.04, 0.04),
+"format": 34359742465,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAQADAAQABAACAAEAAQAAAAUABQADAAEAAwAFAAQAAAACAAQABAAFAAAA"),
+"name": "prototype_texture",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("CtejvArXozzNzMwwCtejPArXozzNzMwwCtejvArXozwM1yM9CtejPArXo7zNzMwwCtejvArXo7wM1yM9CtejvArXo7zNzMww")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_m0iwx"]
+resource_name = "Cube_16424"
+_surfaces = [{
+"aabb": AABB(-0.02, -0.02, 1.49012e-09, 0.04, 0.04, 0.04),
+"attribute_data": PackedByteArray("QAzjPJg8Rz7wPMc9mDxHPkAM4zygDGM98DzHPZg8Rz7wPMc9mDxHPkAM4zygDGM9QAzjPKAMYz3wPMc9mDxnPkAM4zyYPGc+QAzjPJg8Zz7wPMc9mDxnPvA8xz2YPEc+QAzjPJg8Rz5ADOM8oAxjPUAM4zyYPEc+QAzjPKAMYz1ADOM8oAxjPUAM4zyYPEc+"),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABQAGAAMABwAIAAkACQAKAAcACwAMAA0ADgAPABAAEAARAA4A"),
+"material": SubResource("StandardMaterial3D_wmy1s"),
+"name": "prototype_texture",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 18,
+"vertex_data": PackedByteArray("CtejvArXozzNzMwwCtejPArXozzNzMwwCtejvArXozwM1yM9CtejPArXozzNzMwwCtejPArXo7zNzMwwCtejvArXo7wM1yM9CtejvArXozwM1yM9CtejPArXozzNzMwwCtejvArXozzNzMwwCtejvArXo7zNzMwwCtejPArXo7zNzMwwCtejPArXo7zNzMwwCtejvArXo7zNzMwwCtejvArXo7wM1yM9CtejvArXozzNzMwwCtejvArXozwM1yM9CtejvArXo7wM1yM9CtejvArXo7zNzMww/3///////z//f///////P/9///////8//7//f////z//v/9/////P/+//3////8//7//f////z//////////v/////////+//////////7//////////v/9/AAD///+//38AAP///7//fwAA////vwAA/3////+/AAD/f////78AAP9/////vwAA/3////+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rsimf")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_nhrd7"]
+points = PackedVector3Array(-0.02, 0.02, 1.49012e-09, 0.02, 0.02, 1.49012e-09, -0.02, 0.02, 0.04, 0.02, 0.02, 1.49012e-09, 0.02, -0.02, 1.49012e-09, -0.02, -0.02, 0.04, -0.02, 0.02, 0.04, 0.02, 0.02, 1.49012e-09, -0.02, 0.02, 1.49012e-09, -0.02, -0.02, 1.49012e-09, 0.02, -0.02, 1.49012e-09, 0.02, -0.02, 1.49012e-09, -0.02, -0.02, 1.49012e-09, -0.02, -0.02, 0.04, -0.02, 0.02, 1.49012e-09, -0.02, 0.02, 0.04, -0.02, -0.02, 0.04, -0.02, -0.02, 1.49012e-09)
+
+[node name="Primitive_Slope" type="Node3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="Primitive_Slope" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0)
+mesh = SubResource("ArrayMesh_m0iwx")
+skeleton = NodePath("")
+
+[node name="Primitive_Slope_col" type="StaticBody3D" parent="Primitive_Slope"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Primitive_Slope/Primitive_Slope_col"]
+shape = SubResource("ConvexPolygonShape3D_nhrd7")

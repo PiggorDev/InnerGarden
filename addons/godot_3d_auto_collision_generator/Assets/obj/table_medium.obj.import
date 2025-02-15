@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://e8s2i5b5rh86"
+path="res://.godot/imported/table_medium.obj-c717d723d2fedd08e1774e52103f18f8.mesh"
+
+[deps]
+
+files=["res://.godot/imported/table_medium.obj-c717d723d2fedd08e1774e52103f18f8.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/table_medium.obj"
+dest_files=["res://.godot/imported/table_medium.obj-c717d723d2fedd08e1774e52103f18f8.mesh", "res://.godot/imported/table_medium.obj-c717d723d2fedd08e1774e52103f18f8.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

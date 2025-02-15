@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://i0bil8tgyyts"
+path="res://.godot/imported/Dummy_Base_Dummy_Body_Dummy_Head.obj-49bb7d62bf46b51de0ff32007656edfa.mesh"
+
+[deps]
+
+files=["res://.godot/imported/Dummy_Base_Dummy_Body_Dummy_Head.obj-49bb7d62bf46b51de0ff32007656edfa.mesh"]
+
+source_file="res://addons/godot_3d_auto_collision_generator/Assets/obj/Dummy_Base_Dummy_Body_Dummy_Head.obj"
+dest_files=["res://.godot/imported/Dummy_Base_Dummy_Body_Dummy_Head.obj-49bb7d62bf46b51de0ff32007656edfa.mesh", "res://.godot/imported/Dummy_Base_Dummy_Body_Dummy_Head.obj-49bb7d62bf46b51de0ff32007656edfa.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

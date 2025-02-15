@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://by8ckcwdkb7s7"]
+
+[ext_resource type="Script" path="res://hikaru_evil.gd" id="1_e20ls"]
+[ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="2_fsv86"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vq4h2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_64gwy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e02oa"]
+size = Vector3(1, 1.8, 1)
+
+[node name="HikaruEvil" type="CharacterBody3D" groups=["Enemy"]]
+floor_max_angle = 1.22173
+script = ExtResource("1_e20ls")
+vision_radius = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_vq4h2")
+
+[node name="RayFront" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, 0.5)
+debug_shape_custom_color = Color(0.73337, 0.263689, 0.298868, 1)
+debug_shape_thickness = 5
+
+[node name="RayBack" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, -0.6)
+collide_with_areas = true
+debug_shape_custom_color = Color(0.73337, 0.263689, 0.298868, 1)
+debug_shape_thickness = 5
+
+[node name="RayRight" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, 0.5, 0, 0)
+debug_shape_custom_color = Color(0.73337, 0.263689, 0.298868, 1)
+debug_shape_thickness = 5
+
+[node name="RayLeft" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 10, 0, 0, 0, 1, -0.6, 0, 0)
+debug_shape_custom_color = Color(0.73337, 0.263689, 0.298868, 1)
+debug_shape_thickness = 5
+
+[node name="VisionArea" type="Area3D" parent="."]
+
+[node name="VisionShape" type="CollisionShape3D" parent="VisionArea"]
+transform = Transform3D(8.075, 0, 0, 0, 8.075, 0, 0, 0, 8.075, 0, 0, 0)
+shape = SubResource("SphereShape3D_64gwy")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("2_fsv86")
+
+[node name="DeathArea" type="Area3D" parent="."]
+
+[node name="DeathShape" type="CollisionShape3D" parent="DeathArea"]
+shape = SubResource("BoxShape3D_e02oa")
+
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
+[connection signal="body_exited" from="VisionArea" to="." method="_on_vision_area_body_exited"]
+[connection signal="body_entered" from="DeathArea" to="." method="_on_death_area_body_entered"]

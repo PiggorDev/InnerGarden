@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cmscgugche3g7"]
+
+[ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="1_ypn4s"]
+
+[node name="shadow" type="Sprite3D"]
+modulate = Color(0.419608, 0.419608, 0.419608, 0.337255)
+texture = ExtResource("1_ypn4s")

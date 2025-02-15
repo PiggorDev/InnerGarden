@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://brdyxbhrvht5s"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_dljum"]
+size = Vector2(2, 2)
+
+[sub_resource type="Shader" id="Shader_j8wua"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2evn2"]
+render_priority = 0
+shader = SubResource("Shader_j8wua")
+
+[node name="PunchExplosion" type="Node3D"]
+transform = Transform3D(-1, -1.19209e-07, 0, 1.19209e-07, -1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="ExplosionMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_dljum")
+surface_material_override/0 = SubResource("ShaderMaterial_2evn2")
