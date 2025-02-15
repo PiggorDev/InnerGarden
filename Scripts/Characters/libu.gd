@@ -13,6 +13,7 @@ extends CharacterBody3D
 @onready var shadow_handler = $ShadowHandler
 @onready var collision_shape = $LibuShape  # Substitua pelo caminho correto para o CollisionShape3D
 @onready var camera = $LibuCamera3D  # Atualize para o caminho correto
+@onready var world_env = $"../WorldEnvironment"  # Ajuste o caminho conforme necessário
 # Velocidades
 
 @export var walk_speed: float = 5.0  # Velocidade ao andar normalmente
@@ -132,6 +133,9 @@ var direction: Vector3 = Vector3.ZERO
 var last_direction: Vector3 = Vector3.FORWARD
 var input_direction: Vector3 = Vector3.ZERO  # Direção do input do jogador no momento do grude
 
+#Imaginação
+var is_imagination_active = false
+
 func _ready():
 	$Sprite3D/IteminHand.visible = false  # Item começa invisível
 	
@@ -164,6 +168,7 @@ func _ready():
 		camera.connect("first_person_toggled", Callable(self, "_on_first_person_toggled"))
 
 func _input(event):
+	
 	if is_camera_locked:
 		print("Câmera bloqueada.")
 		return
@@ -226,6 +231,10 @@ func _input(event):
 			velocity.y = umbrella_jump_boost
 			umbrella_used = true  # Marca que o guarda-chuva foi usado
 			print("☂️ Pulo especial ativado! Velocidade Y:", velocity.y)
+			
+	if event.is_action_pressed("toggle_imagination"):  # Pressionando X
+		is_imagination_active = !is_imagination_active
+		update_imagination_filter()
 
 func _process(delta):
 
@@ -1001,3 +1010,15 @@ func set_umbrella_active(active: bool):
 		#print("🛑 Guarda-chuva desativado.")
 	#else:
 		#print("✅ Guarda-chuva ativado!")
+		
+func update_imagination_filter():
+	if world_env:
+		if is_imagination_active:
+			world_env.environment.adjustment_enabled = true
+			world_env.environment.adjustment_brightness = 1.1  # Torna mais brilhante
+			world_env.environment.adjustment_contrast = 1.05  # Aumenta o contraste
+			world_env.environment.adjustment_saturation = 1.5  # Cores mais vivas
+			print("✨ Modo imaginação ativado! ✨")
+		else:
+			world_env.environment.adjustment_enabled = false  # Desativa efeitos
+			print("🔄 Modo imaginação desativado.")

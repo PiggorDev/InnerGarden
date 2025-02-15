@@ -515,7 +515,7 @@ transform = Transform3D(-1, 0, 1.50996e-07, 0, 1, 0, -1.50996e-07, 0, -1, 50.990
 script = ExtResource("4_mekpn")
 
 [node name="Sprite3D" type="Sprite3D" parent="HikaruNPC"]
-transform = Transform3D(0.74, 0, 0, 0, 0.74, 0, 0, 0, 0.74, 0, -0.3, 0)
+transform = Transform3D(0.74, 0, 0, 0, 0.74, 0, 0, 0, 0.74, 0, -1.00615, 0)
 billboard = 2
 texture = ExtResource("5_88ija")
 
@@ -746,7 +746,7 @@ spot_range = 7.046
 spot_angle = 32.01
 
 [node name="Character Switch" type="Node3D" parent="."]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 29.1, -6.1, -45.5)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 29.1, -6.85782, -45.5)
 script = ExtResource("34_20jf4")
 
 [node name="Sprite3D" type="Sprite3D" parent="Character Switch"]
@@ -771,7 +771,10 @@ spot_range = 7.046
 spot_angle = 32.01
 
 [node name="HikaruEvil" parent="." instance=ExtResource("28_nfrb8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -5.5, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, -6.33023, -6)
+patrol_speed = 4.0
+chase_speed = 10.0
+vision_radius = 2.5
 
 [node name="PapoulaNegra" type="Area3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 52.6, -6.7, -15.3)
@@ -798,10 +801,10 @@ spot_range = 3.0
 spot_angle = 22.8521
 
 [node name="Door" parent="." instance=ExtResource("54_tjt50")]
-transform = Transform3D(1.19209e-07, 0, 6.58653, 0, 0.977392, 0, -4.83479, 0, 2.38419e-07, 35.5, -11.9, -29.3755)
+transform = Transform3D(1.19209e-07, 0, 6.58653, 0, 0.977392, 0, -4.83479, 0, 2.38419e-07, 35.5, -14.5022, -29.3755)
 
 [node name="Libu" parent="." instance=ExtResource("37_isg0k")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 28.9, -5.2, -4.2)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 28.9, -6.36366, -4.2)
 wall_jump_upward_speed = -15.0
 dash_cooldown = 2.0
 wall_jump_horizontal_force = -15.0
@@ -812,7 +815,7 @@ shoot_cooldown = 0.15
 max_charge_time = 0.5
 
 [node name="CutsceneEloisa" parent="." instance=ExtResource("49_nuysx")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.8, -5.3, -47.2)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.8, -5.97361, -47.2)
 
 [connection signal="body_entered" from="block-moving2/Area3D" to="block-moving2" method="_on_body_entered"]
 [connection signal="body_exited" from="block-moving2/Area3D" to="block-moving2" method="_on_body_exited"]

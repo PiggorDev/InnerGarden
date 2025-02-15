@@ -29,7 +29,8 @@ func _ready():
 	if shadow_texture != null && shadow_sprite != null:
 		shadow_sprite.texture = shadow_texture
 
-func _physics_process(delta):
+func _process(delta):
+
 	if shadow_raycast.is_colliding() and shadow_sprite != null:
 		# Obtém o objeto colidido
 		var collider = shadow_raycast.get_collider()
