@@ -1,13 +1,13 @@
 [gd_scene load_steps=24 format=4 uid="uid://c3s2nh7t44uda"]
 
-[ext_resource type="Script" path="res://Props/Level1/prototype_main.gd" id="1_haci8"]
+[ext_resource type="Script" uid="uid://bq842wxmedhgn" path="res://Props/Level1/prototype_main.gd" id="1_haci8"]
 [ext_resource type="PackedScene" uid="uid://b1bogfswsi4m2" path="res://Characters/libu.tscn" id="9_ytv40"]
-[ext_resource type="Script" path="res://Scripts/Characters/hikaru.gd" id="11_h68y4"]
+[ext_resource type="Script" uid="uid://ccm5m56fjcn4t" path="res://Scripts/Characters/hikaru.gd" id="11_h68y4"]
 [ext_resource type="PackedScene" uid="uid://dmf1818s1mf5k" path="res://MeshTest/Floor_Prototype.tscn" id="11_wxiyo"]
 [ext_resource type="PackedScene" uid="uid://csdorg2race5d" path="res://MeshTest/Primitive_Slope.tscn" id="12_rht0y"]
 [ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="12_xgvls"]
-[ext_resource type="Script" path="res://Scripts/door.gd" id="14_12xtb"]
-[ext_resource type="Script" path="res://Scripts/camera_switch.gd" id="18_vu18p"]
+[ext_resource type="Script" uid="uid://dbhs7cxkq5ceq" path="res://Scripts/door.gd" id="14_12xtb"]
+[ext_resource type="Script" uid="uid://bn2iec408t7g3" path="res://Scripts/camera_switch.gd" id="18_vu18p"]
 [ext_resource type="Texture2D" uid="uid://d0p3i2d51sc2i" path="res://Sprites/Camera.png" id="19_l1jaq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_l768p"]
@@ -111,9 +111,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jfo78"]
 _data = {
-"RESET": SubResource("Animation_yqa2d"),
-"close": SubResource("Animation_k6706"),
-"open": SubResource("Animation_gksnh")
+&"RESET": SubResource("Animation_yqa2d"),
+&"close": SubResource("Animation_k6706"),
+&"open": SubResource("Animation_gksnh")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h8jgw"]

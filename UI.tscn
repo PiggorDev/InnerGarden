@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://m34j0d072yu"]
 
-[ext_resource type="Script" path="res://canvas_layer.gd" id="1_ss13m"]
-[ext_resource type="Script" path="res://life_bars.gd" id="2_bk45p"]
+[ext_resource type="Script" uid="uid://7o2tnedpxxgf" path="res://canvas_layer.gd" id="1_ss13m"]
+[ext_resource type="Script" uid="uid://7pkjbe783k6e" path="res://life_bars.gd" id="2_bk45p"]
 [ext_resource type="Texture2D" uid="uid://bpmneglwwmo7l" path="res://Sprites/LifeBarLibu/BIGLifeBarLibu.png" id="2_lpgtc"]
 [ext_resource type="Texture2D" uid="uid://cqngeokh5sqxf" path="res://Sprites/LifeBarLibu/BIGLifeBarLibuHurt1.png" id="3_rw0w2"]
 [ext_resource type="Texture2D" uid="uid://fhb8wcdqdtls" path="res://Sprites/LifeBarLibu/LifeBarLibuDead.png" id="4_43ok1"]
@@ -16,7 +16,7 @@
 [ext_resource type="FontFile" uid="uid://cegsd0hghaxhm" path="res://font/Good Matcha.otf" id="13_on6oe"]
 [ext_resource type="Texture2D" uid="uid://dpg1ox2uxwmst" path="res://Sprites/Inventory/InventoryBigSlot1.png" id="14_w8doh"]
 [ext_resource type="Texture2D" uid="uid://c813urd1cdt7h" path="res://Sprites/Inventory/Solid_white_bordered.png" id="15_qkkqx"]
-[ext_resource type="Script" path="res://inventory.gd" id="15_x5duh"]
+[ext_resource type="Script" uid="uid://bmtfo62f41b32" path="res://inventory.gd" id="15_x5duh"]
 [ext_resource type="Texture2D" uid="uid://doovt5gp1j5aa" path="res://Sprites/Inventory/InventoryBigSlot2.png" id="16_yk5p3"]
 [ext_resource type="Texture2D" uid="uid://bllec5dhvlqqo" path="res://Sprites/Inventory/InventoryBigSlot3.png" id="17_qnx3v"]
 [ext_resource type="Texture2D" uid="uid://djgo5voop2fjx" path="res://Sprites/Inventory/InventoryBigSlot4.png" id="18_8yyhk"]

@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://v0ak0l71r3cc"]
 
-[ext_resource type="Script" path="res://Cutscenes/cutscene_eloisa.gd" id="1_bxfko"]
+[ext_resource type="Script" uid="uid://bfma0uyc2oxfg" path="res://Cutscenes/cutscene_eloisa.gd" id="1_bxfko"]
 [ext_resource type="Texture2D" uid="uid://70xy6ol8ww5n" path="res://Sprites/Eloisa.png" id="1_vurow"]
-[ext_resource type="Script" path="res://Cutscenes/interact_areaCutsceneEloisa.gd" id="3_k80ep"]
+[ext_resource type="Script" uid="uid://ciy612gwta04m" path="res://Cutscenes/interact_areaCutsceneEloisa.gd" id="3_k80ep"]
 
 [sub_resource type="Animation" id="Animation_d83j3"]
 length = 0.001
@@ -219,10 +219,10 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_67nem"]
 _data = {
-"RESET": SubResource("Animation_d83j3"),
-"cutscene_eloisa": SubResource("Animation_k8go3"),
-"hide_bars": SubResource("Animation_j7ogk"),
-"show_bars": SubResource("Animation_6wdoj")
+&"RESET": SubResource("Animation_d83j3"),
+&"cutscene_eloisa": SubResource("Animation_k8go3"),
+&"hide_bars": SubResource("Animation_j7ogk"),
+&"show_bars": SubResource("Animation_6wdoj")
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f5r6h"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://by8ckcwdkb7s7"]
 
-[ext_resource type="Script" path="res://hikaru_evil.gd" id="1_e20ls"]
+[ext_resource type="Script" uid="uid://b8g5elr7pnk5s" path="res://hikaru_evil.gd" id="1_e20ls"]
 [ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="2_fsv86"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vq4h2"]

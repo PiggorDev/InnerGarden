@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://b1bogfswsi4m2"]
 
-[ext_resource type="Script" path="res://Scripts/Characters/libu.gd" id="1_0isec"]
-[ext_resource type="Script" path="res://Scripts/camera_3d.gd" id="2_ibpu5"]
+[ext_resource type="Script" uid="uid://0pi3g4ugwe61" path="res://Scripts/Characters/libu.gd" id="1_0isec"]
+[ext_resource type="Script" uid="uid://c4yrl7bdm0k5y" path="res://Scripts/camera_3d.gd" id="2_ibpu5"]
 [ext_resource type="PackedScene" uid="uid://dtwtcmhowblb4" path="res://Mechanics/Crosshair.tscn" id="2_jh1w3"]
 [ext_resource type="PackedScene" uid="uid://b4fg1kjvanoah" path="res://Props/Level1/BOLAAZU.tscn" id="3_b0ant"]
-[ext_resource type="Script" path="res://shadow_handler.gd" id="4_6pc02"]
+[ext_resource type="Script" uid="uid://b0qtt7d2wfext" path="res://shadow_handler.gd" id="4_6pc02"]
 [ext_resource type="PackedScene" uid="uid://dmpm1ekhycsqp" path="res://Assets/TreeMade/Charged Project.tscn" id="4_mhi7e"]
 [ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="5_xd0lu"]
 [ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="6_j0tps"]
@@ -66,7 +66,7 @@ shape = SubResource("BoxShape3D_1bcdb")
 transform = Transform3D(0.017, 0, 0, 0, 0.017, 0, 0, 0, 0.017, 0, 0.157499, 0)
 extra_cull_margin = 1.0
 gi_mode = 2
-gi_lightmap_scale = 3
+gi_lightmap_texel_scale = 8.0
 pixel_size = 0.2
 billboard = 2
 alpha_cut = 2

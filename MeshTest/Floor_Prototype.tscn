@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=4 uid="uid://dmf1818s1mf5k"]
 
-[ext_resource type="Texture2D" uid="uid://dxbnrycc4qgn3" path="res://addons/godot_3d_auto_collision_generator/Assets/fbx/prototypebits_texture.png" id="1_vv43p"]
+[ext_resource type="Texture2D" uid="uid://b8d4pglxcbqgb" path="res://addons/godot_3d_auto_collision_generator/Assets/fbx/prototypebits_texture.png" id="1_vv43p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ww1x4"]
 resource_name = "prototype_texture"

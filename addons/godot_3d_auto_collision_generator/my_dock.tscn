@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cskb6en7suhat"]
 
-[ext_resource type="Script" path="res://addons/godot_3d_auto_collision_generator/my_dock.gd" id="1_kye4u"]
-[ext_resource type="Script" path="res://addons/godot_3d_auto_collision_generator/directory_tree.gd" id="2_ixkoi"]
+[ext_resource type="Script" uid="uid://cp0jwljpm1ap" path="res://addons/godot_3d_auto_collision_generator/my_dock.gd" id="1_kye4u"]
+[ext_resource type="Script" uid="uid://b0h5fgdqv0rpi" path="res://addons/godot_3d_auto_collision_generator/directory_tree.gd" id="2_ixkoi"]
 
 [node name="Auto Collision Generator" type="Control"]
 layout_mode = 3

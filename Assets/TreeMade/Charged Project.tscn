@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dmpm1ekhycsqp"]
 
-[ext_resource type="Script" path="res://Assets/TreeMade/charged_project.gd" id="1_dxi8n"]
+[ext_resource type="Script" uid="uid://do4fwwmo0cwra" path="res://Assets/TreeMade/charged_project.gd" id="1_dxi8n"]
 [ext_resource type="Texture2D" uid="uid://bi45mg3omibd3" path="res://Sprites/BIGBoom.png" id="3_oqpg1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a3lie"]

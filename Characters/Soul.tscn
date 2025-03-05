@@ -1,9 +1,9 @@
 [gd_scene load_steps=10 format=3 uid="uid://coe5qxbkg7ws8"]
 
-[ext_resource type="Script" path="res://Characters/soul.gd" id="1_bcjs5"]
-[ext_resource type="Script" path="res://Characters/soul_camera_3d.gd" id="2_w6n0p"]
+[ext_resource type="Script" uid="uid://hph5oiljmkqg" path="res://Characters/soul.gd" id="1_bcjs5"]
+[ext_resource type="Script" uid="uid://douy8u7e33rrg" path="res://Characters/soul_camera_3d.gd" id="2_w6n0p"]
 [ext_resource type="Texture2D" uid="uid://du8timc0bl2qy" path="res://Sprites/Soul.png" id="6_n1w8g"]
-[ext_resource type="Script" path="res://shadow_handler.gd" id="7_ekch4"]
+[ext_resource type="Script" uid="uid://b0qtt7d2wfext" path="res://shadow_handler.gd" id="7_ekch4"]
 [ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="8_y46yf"]
 [ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="9_odws7"]
 

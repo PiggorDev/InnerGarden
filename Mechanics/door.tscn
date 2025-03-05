@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=4 uid="uid://cl2ok33anh807"]
 
-[ext_resource type="Script" path="res://Scripts/door.gd" id="1_kfjr5"]
+[ext_resource type="Script" uid="uid://dbhs7cxkq5ceq" path="res://Scripts/door.gd" id="1_kfjr5"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aufvc"]
 load_path = "res://.godot/imported/prototypebits_texture.png-5f7c2a7da4c5d92f349461c1da2a73aa.s3tc.ctex"
@@ -81,9 +81,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jqb2w"]
 _data = {
-"RESET": SubResource("Animation_xgf57"),
-"door_closed": SubResource("Animation_hitoa"),
-"door_open": SubResource("Animation_1nwdd")
+&"RESET": SubResource("Animation_xgf57"),
+&"door_closed": SubResource("Animation_hitoa"),
+&"door_open": SubResource("Animation_1nwdd")
 }
 
 [node name="Door" type="Node3D"]

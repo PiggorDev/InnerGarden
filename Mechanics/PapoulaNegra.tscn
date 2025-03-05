@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7sajkykts1k7"]
 
-[ext_resource type="Script" path="res://PapoulaNegra.gd" id="1_qgenq"]
+[ext_resource type="Script" uid="uid://xvhg5kabfgdq" path="res://PapoulaNegra.gd" id="1_qgenq"]
 [ext_resource type="Texture2D" uid="uid://dwj1c6rh7mht0" path="res://Sprites/papoulanegra.png" id="2_yshhp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_li0cr"]

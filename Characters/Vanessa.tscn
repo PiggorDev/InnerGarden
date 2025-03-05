@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://bo4pmx7ls8252"]
 
-[ext_resource type="Script" path="res://Scripts/Characters/vanessa.gd" id="1_jl3ec"]
+[ext_resource type="Script" uid="uid://ca3ulu4dha4xc" path="res://Scripts/Characters/vanessa.gd" id="1_jl3ec"]
 [ext_resource type="PackedScene" uid="uid://brdyxbhrvht5s" path="res://Shaders/punch_explosion.tscn" id="2_sk7gi"]
-[ext_resource type="Script" path="res://Characters/Vanessacamera_3d.gd" id="5_r6440"]
+[ext_resource type="Script" uid="uid://buhxtjnm5dpyy" path="res://Characters/Vanessacamera_3d.gd" id="5_r6440"]
 [ext_resource type="Texture2D" uid="uid://b62utqgrciavk" path="res://Sprites/VanessaBIG.png" id="6_yt7xl"]
-[ext_resource type="Script" path="res://shadow_handler.gd" id="7_wqo6m"]
+[ext_resource type="Script" uid="uid://b0qtt7d2wfext" path="res://shadow_handler.gd" id="7_wqo6m"]
 [ext_resource type="Texture2D" uid="uid://csvc5giw0d7wf" path="res://Sprites/pngtree-cute-comic-pop-art-pow-bubble-png-image_12925655.png" id="8_d6o2h"]
 [ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="8_rnr2a"]
 [ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="9_6hhcc"]

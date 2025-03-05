@@ -1,10 +1,7 @@
-[gd_scene load_steps=6 format=4 uid="uid://u5dowop6rcqy"]
-
-[ext_resource type="Texture2D" uid="uid://crmmru78iwgcy" path="res://Assets/gltf/prototypebits_texture.png" id="1_rj1xs"]
+[gd_scene load_steps=5 format=4 uid="uid://u5dowop6rcqy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jx3vj"]
 resource_name = "prototype_texture"
-albedo_texture = ExtResource("1_rj1xs")
 roughness = 0.4
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_4h8ku"]

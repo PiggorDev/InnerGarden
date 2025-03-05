@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bwpj850o2qt1m"]
 
-[ext_resource type="Script" path="res://Scenes/umbrella.gd" id="1_dteyh"]
+[ext_resource type="Script" uid="uid://b52ot40ul1fy0" path="res://Scenes/umbrella.gd" id="1_dteyh"]
 
 [node name="Umbrella" type="Node3D"]
 script = ExtResource("1_dteyh")
