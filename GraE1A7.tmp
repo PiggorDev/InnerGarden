@@ -213,9 +213,10 @@ text = "PAUSE
 uppercase = true
 
 [node name="PauseRect" type="ColorRect" parent="CanvasLayer/PauseMenu"]
+visible = false
 z_as_relative = false
 offset_right = 1927.0
-offset_bottom = 1090.0
+offset_bottom = 1077.0
 color = Color(0, 0, 0, 0.27451)
 
 [node name="LifeBars" type="Control" parent="CanvasLayer"]

@@ -8,7 +8,7 @@ extends Node2D
 
 func _input(event):
 	# Detecta quando o jogador pressiona "Enter"
-	if event.is_action_pressed("ui_accept"):  # "ui_accept" mapeado para Enter no Godot
+	if event.is_action_pressed("ui_jump"):  # "ui_jump" mapeado para Enter no Godot
 		change_to_prototype()
 
 

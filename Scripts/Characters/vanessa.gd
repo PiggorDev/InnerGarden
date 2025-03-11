@@ -205,7 +205,7 @@ func _input(event):
 			clear_target()
 
 	
-	if event.is_action_pressed("ui_accept") and is_wall_sliding:
+	if event.is_action_pressed("ui_jump") and is_wall_sliding:
 		perform_wall_jump()
 		
 
@@ -277,7 +277,7 @@ func _input(event):
 		clear_target()  # Remove o alvo e a mira
 
 	# Wall Jump - Pulo na parede
-	if event.is_action_pressed("ui_accept") and is_wall_sliding:
+	if event.is_action_pressed("ui_jump") and is_wall_sliding:
 		perform_wall_jump()
 
 	# Carregamento e disparo
@@ -562,7 +562,7 @@ func _physics_process(delta):
 
 	# 1) Aplicar gravidade com modificadores
 	if not is_on_floor():
-		if velocity.y > 0 and not Input.is_action_pressed("ui_accept"):
+		if velocity.y > 0 and not Input.is_action_pressed("ui_jump"):
 			# Pulo curto: jogador soltou o botão de pulo
 			velocity.y += gravity * short_hop_gravity_multiplier * delta
 		elif velocity.y < 0:
@@ -621,7 +621,7 @@ func _physics_process(delta):
 		_handle_input(delta)
 
 	# 9) Executa pulo com bloqueio para evitar double jump
-	if (is_on_floor() or (can_coyote_jump and not has_jumped)) and Input.is_action_just_pressed("ui_accept"):
+	if (is_on_floor() or (can_coyote_jump and not has_jumped)) and Input.is_action_just_pressed("ui_jump"):
 		velocity.y = jump_speed
 		has_jumped = true  # Marca que o jogador pulou
 
@@ -893,7 +893,7 @@ func _handle_input(delta):
 	# 4) Pulo normal se no chão (opcional colocar aqui)
 	#    Se você preferir fazer o pulo no `_physics_process`, tudo bem.
 	if is_on_floor():
-		if Input.is_action_just_pressed("ui_accept"):
+		if Input.is_action_just_pressed("ui_jump"):
 			velocity.y = jump_speed
 
 	# 5) Aplica a direction no eixo X e Z da velocity

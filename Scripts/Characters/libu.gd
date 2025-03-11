@@ -182,7 +182,7 @@ func _input(event):
 		return
 
 	# **Wall Jump**
-	if event.is_action_pressed("ui_accept") and is_wall_sliding:
+	if event.is_action_pressed("ui_jump") and is_wall_sliding:
 		perform_wall_jump()
 
 	# **Dash - Ativado apenas com Duplo Shift**
@@ -219,15 +219,15 @@ func _input(event):
 
 	# **Mecânica do Guarda-chuva**
 	if umbrella_active:
-		if event.is_action_pressed("ui_accept") and not is_on_floor() and not umbrella_used:
+		if event.is_action_pressed("ui_jump") and not is_on_floor() and not umbrella_used:
 			is_holding_jump = true
 			print("☂️ Queda suave ativada com guarda-chuva!")
-		elif event.is_action_released("ui_accept"):
+		elif event.is_action_released("ui_jump"):
 			is_holding_jump = false
 			print("🛑 Queda suave desativada!")
 
 		# Adiciona impulso especial ao pular com o guarda-chuva
-		if Input.is_action_just_pressed("ui_accept") and not is_on_floor() and not umbrella_used:
+		if Input.is_action_just_pressed("ui_jump") and not is_on_floor() and not umbrella_used:
 			velocity.y = umbrella_jump_boost
 			umbrella_used = true  # Marca que o guarda-chuva foi usado
 			print("☂️ Pulo especial ativado! Velocidade Y:", velocity.y)
@@ -428,12 +428,12 @@ func _physics_process(delta):
 	# 1) Aplicar gravidade com modificadores
 	if not is_on_floor():
 		# 🔥 Permite ativar o glide a qualquer momento no ar
-		if Input.is_action_just_pressed("ui_accept") and umbrella_active:
+		if Input.is_action_just_pressed("ui_jump") and umbrella_active:
 			is_holding_jump = true  # Ativa o glide
 			umbrella_used = true  # O guarda-chuva foi usado, mas pode ser reativado
 			print("☂️ Glide ativado!")
 
-		if Input.is_action_just_released("ui_accept"):
+		if Input.is_action_just_released("ui_jump"):
 			is_holding_jump = false  # Permite desativar o glide e voltar à queda livre
 			print("🛑 Glide desativado!")
 
@@ -442,7 +442,7 @@ func _physics_process(delta):
 			velocity.y = lerp(velocity.y, gentle_fall_speed, 0.05)
 		else:
 			# Gravidade normal (queda livre)
-			if velocity.y > 0 and not Input.is_action_pressed("ui_accept"):
+			if velocity.y > 0 and not Input.is_action_pressed("ui_jump"):
 				# Pulo curto: jogador soltou o botão de pulo
 				velocity.y += gravity * short_hop_gravity_multiplier * delta
 			elif velocity.y < 0:
@@ -507,7 +507,7 @@ func _physics_process(delta):
 
 	# 9) Executa pulo normal e bloqueia double jump
 # 9) Executa pulo normal e bloqueia double jump
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_jump"):
 		if is_on_floor():
 			# 🔥 Pulo normal
 			velocity.y = jump_speed
@@ -788,7 +788,7 @@ func _handle_input(delta):
 			velocity = Vector3.ZERO
 
 	# 5) Pulo normal se estiver no chão
-	if is_on_floor() and Input.is_action_just_pressed("ui_accept"):
+	if is_on_floor() and Input.is_action_just_pressed("ui_jump"):
 		velocity.y = jump_speed
 		
 	if is_on_floor():
