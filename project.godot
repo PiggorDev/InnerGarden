@@ -12,12 +12,12 @@ config_version=5
 
 config/name="Inner Garden"
 run/main_scene="res://Scenes/cena_principal.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-WindowManager="*res://Scripts/System/window_manager.gd"
+WindowManager="res://Scripts/System/window_manager.gd"
 Global="*res://Scripts/System/Global.gd"
 HealthManager="*res://Scripts/System/HealthManager.gd"
 BackupManager="*res://BackupManager.gd"
@@ -120,11 +120,11 @@ ui_pause={
 camera/depth_of_field/depth_of_field_bokeh_quality=2
 environment/ssao/quality=3
 environment/ssil/quality=3
+viewport/hdr_2d=true
+anti_aliasing/quality/msaa_2d=3
+anti_aliasing/quality/msaa_3d=1
 scaling_3d/mode=2
 environment/screen_space_reflection/roughness_quality=2
 environment/subsurface_scattering/subsurface_scattering_quality=2
-anti_aliasing/quality/msaa_2d=3
-anti_aliasing/quality/msaa_3d=1
-viewport/hdr_2d=true
 lights_and_shadows/positional_shadow/atlas_quadrant_2_subdiv=4
 2d/sdf/scale=0

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="3_n2qpw"]
 [ext_resource type="Texture2D" uid="uid://d0p3i2d51sc2i" path="res://Sprites/Camera.png" id="4_72hkn"]
 [ext_resource type="PackedScene" uid="uid://by8ckcwdkb7s7" path="res://Characters/Evil_Hikaru.tscn" id="5_8hmh7"]
-[ext_resource type="Texture2D" uid="uid://bwpb5il2s6rux" path="res://addons/godot_3d_auto_collision_generator/Assets/gltf/prototypebits_texture.png" id="5_8t5sy"]
+[ext_resource type="Texture2D" uid="uid://k3gq0ulljgxg" path="res://addons/godot_3d_auto_collision_generator/Assets/gltf/prototypebits_texture.png" id="5_8t5sy"]
 [ext_resource type="Texture2D" uid="uid://bpmneglwwmo7l" path="res://Sprites/LifeBarLibu/BIGLifeBarLibu.png" id="7_8gwgr"]
 [ext_resource type="Texture2D" uid="uid://cqngeokh5sqxf" path="res://Sprites/LifeBarLibu/BIGLifeBarLibuHurt1.png" id="8_58vlx"]
 [ext_resource type="Texture2D" uid="uid://fhb8wcdqdtls" path="res://Sprites/LifeBarLibu/LifeBarLibuDead.png" id="9_cim7v"]

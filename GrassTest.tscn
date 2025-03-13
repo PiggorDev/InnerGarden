@@ -1,13 +1,14 @@
-[gd_scene load_steps=69 format=4 uid="uid://jqm88ic58orn"]
+[gd_scene load_steps=75 format=4 uid="uid://jqm88ic58orn"]
 
 [ext_resource type="Texture2D" uid="uid://dgf2vixtti047" path="res://Sky/kloofendal_48d_partly_cloudy_puresky_4k.exr" id="1_a0aa3"]
-[ext_resource type="Script" path="res://canvas_layer.gd" id="1_l0vgl"]
+[ext_resource type="Script" uid="uid://7o2tnedpxxgf" path="res://canvas_layer.gd" id="1_l0vgl"]
 [ext_resource type="PackedScene" uid="uid://cb4ttlxuoqu24" path="res://Assets/TreeMade/block-grass-overhang-large-tall2.tscn" id="1_lcs3a"]
+[ext_resource type="PackedScene" uid="uid://da2lft83vaa4r" path="res://Scripts/System/world_environment.tscn" id="1_omxcq"]
 [ext_resource type="PackedScene" uid="uid://boxvxcw6es04t" path="res://Assets/TreeMade/block-grass-large2.tscn" id="2_75jt2"]
 [ext_resource type="PackedScene" uid="uid://e34n8fyj33w5" path="res://Assets/TreeMade/block-grass-large-tall2.tscn" id="3_7j6y5"]
-[ext_resource type="Script" path="res://pause_menu.gd" id="3_hp343"]
+[ext_resource type="Script" uid="uid://bovkhj08pncyy" path="res://pause_menu.gd" id="3_hp343"]
 [ext_resource type="Texture2D" uid="uid://bpmneglwwmo7l" path="res://Sprites/LifeBarLibu/BIGLifeBarLibu.png" id="3_uq2fa"]
-[ext_resource type="Script" path="res://Scripts/Characters/hikaru.gd" id="4_mekpn"]
+[ext_resource type="Script" uid="uid://ccm5m56fjcn4t" path="res://Scripts/Characters/hikaru.gd" id="4_mekpn"]
 [ext_resource type="PackedScene" uid="uid://b1rmucew8xwvb" path="res://Assets/TreeMade/block-grass-curve-low2.tscn" id="4_mr25c"]
 [ext_resource type="Texture2D" uid="uid://cqngeokh5sqxf" path="res://Sprites/LifeBarLibu/BIGLifeBarLibuHurt1.png" id="4_ntemd"]
 [ext_resource type="Texture2D" uid="uid://hlqmffyiuvx3" path="res://Sprites/BIGHikaru.png" id="5_88ija"]
@@ -32,24 +33,28 @@
 [ext_resource type="PackedScene" uid="uid://bvbntioyhmvmi" path="res://Assets/TreeMade/block-grass-overhang-large-slope-steep2.tscn" id="14_kn7gv"]
 [ext_resource type="Texture2D" uid="uid://c0lbxvkoe17vt" path="res://Assets/GLB format/Textures/colormap.png" id="16_5tofn"]
 [ext_resource type="Texture2D" uid="uid://dpg1ox2uxwmst" path="res://Sprites/Inventory/InventoryBigSlot1.png" id="16_cblrh"]
-[ext_resource type="Script" path="res://MovingPlatform.gd" id="16_gbb2m"]
-[ext_resource type="Texture2D" uid="uid://bwpb5il2s6rux" path="res://addons/godot_3d_auto_collision_generator/Assets/gltf/prototypebits_texture.png" id="17_7d3s7"]
+[ext_resource type="Script" uid="uid://bx2derafh377r" path="res://MovingPlatform.gd" id="16_gbb2m"]
+[ext_resource type="Texture2D" uid="uid://k3gq0ulljgxg" path="res://addons/godot_3d_auto_collision_generator/Assets/gltf/prototypebits_texture.png" id="17_7d3s7"]
 [ext_resource type="Texture2D" uid="uid://c813urd1cdt7h" path="res://Sprites/Inventory/Solid_white_bordered.png" id="17_7l0jo"]
 [ext_resource type="PackedScene" uid="uid://gx5g7kojo0eg" path="res://Assets/TreeMade/block-grass-low-long2.tscn" id="17_o3ja8"]
 [ext_resource type="Texture2D" uid="uid://doovt5gp1j5aa" path="res://Sprites/Inventory/InventoryBigSlot2.png" id="18_0rtil"]
-[ext_resource type="Script" path="res://abismo.gd" id="19_7bml6"]
+[ext_resource type="Script" uid="uid://bkxaeqgdpdc17" path="res://abismo.gd" id="19_7bml6"]
 [ext_resource type="Texture2D" uid="uid://bllec5dhvlqqo" path="res://Sprites/Inventory/InventoryBigSlot3.png" id="19_wxei1"]
 [ext_resource type="Texture2D" uid="uid://djgo5voop2fjx" path="res://Sprites/Inventory/InventoryBigSlot4.png" id="20_o4tid"]
 [ext_resource type="Texture2D" uid="uid://cflggtvu2k12s" path="res://Sprites/Inventory/InventoryBigsmall.png" id="21_2a8ta"]
 [ext_resource type="PackedScene" uid="uid://by8ckcwdkb7s7" path="res://Characters/Evil_Hikaru.tscn" id="28_nfrb8"]
-[ext_resource type="Script" path="res://Scripts/camera_switch.gd" id="32_rjam5"]
+[ext_resource type="Script" uid="uid://bn2iec408t7g3" path="res://Scripts/camera_switch.gd" id="32_rjam5"]
 [ext_resource type="Texture2D" uid="uid://d0p3i2d51sc2i" path="res://Sprites/Camera.png" id="33_2rfs0"]
-[ext_resource type="Script" path="res://character_switch.gd" id="34_20jf4"]
-[ext_resource type="Script" path="res://PapoulaNegra.gd" id="34_epx85"]
+[ext_resource type="Script" uid="uid://c6hjyveqknbum" path="res://character_switch.gd" id="34_20jf4"]
+[ext_resource type="Script" uid="uid://xvhg5kabfgdq" path="res://PapoulaNegra.gd" id="34_epx85"]
 [ext_resource type="Texture2D" uid="uid://dwj1c6rh7mht0" path="res://Sprites/papoulanegra.png" id="35_3wxbc"]
 [ext_resource type="Texture2D" uid="uid://ciwkrxewxfnrv" path="res://CharacterSwap.png" id="35_doed8"]
 [ext_resource type="PackedScene" uid="uid://b1bogfswsi4m2" path="res://Characters/libu.tscn" id="37_isg0k"]
 [ext_resource type="PackedScene" uid="uid://v0ak0l71r3cc" path="res://Cutscenes/CutsceneEloisa.tscn" id="49_nuysx"]
+[ext_resource type="Script" uid="uid://broyo4plu74yk" path="res://day_night_switch.gd" id="52_s7mvx"]
+[ext_resource type="Environment" uid="uid://vsm8b5ca1lsj" path="res://Sprites/night_environment.tres" id="53_4eenm"]
+[ext_resource type="Texture2D" uid="uid://hn10obnmeogi" path="res://Sprites/DayNight.png" id="53_omxcq"]
+[ext_resource type="Environment" uid="uid://d2rcrrsyblm70" path="res://Sky/day_environment.tres" id="54_4eenm"]
 [ext_resource type="PackedScene" uid="uid://cl2ok33anh807" path="res://Mechanics/door.tscn" id="54_tjt50"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lb4bl"]
@@ -59,7 +64,7 @@ panorama = ExtResource("1_a0aa3")
 sky_material = SubResource("PanoramaSkyMaterial_lb4bl")
 process_mode = 3
 
-[sub_resource type="Environment" id="Environment_drx40"]
+[sub_resource type="Environment" id="Environment_wxtgv"]
 background_mode = 2
 background_color = Color(0.241759, 0.754866, 0.83609, 1)
 background_energy_multiplier = 1.5
@@ -181,10 +186,13 @@ size = Vector3(8.5, 8.5, 9)
 [sub_resource type="BoxShape3D" id="BoxShape3D_li0cr"]
 size = Vector3(0.0881299, 0.12, 0.086457)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_4eenm"]
+size = Vector3(17.3192, 20.9778, 15.9031)
+
 [node name="Node3D" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_drx40")
+[node name="WorldEnvironment" parent="." instance=ExtResource("1_omxcq")]
+environment = SubResource("Environment_wxtgv")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("1_l0vgl")
@@ -214,6 +222,7 @@ uppercase = true
 
 [node name="PauseRect" type="ColorRect" parent="CanvasLayer/PauseMenu"]
 z_as_relative = false
+layout_mode = 0
 offset_right = 1927.0
 offset_bottom = 1090.0
 color = Color(0, 0, 0, 0.27451)
@@ -642,6 +651,7 @@ transform = Transform3D(4.34783, 0, 0, 0, 4.34783, 0, 0, 0, 4.34783, 21.7391, -7
 
 [node name="flowers" parent="Organizador" instance=ExtResource("12_ggkwa")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 19.0435, -7.76304, 8.4)
+visible = false
 
 [node name="block-grass-overhang-large-slope-steep2" parent="Organizador" instance=ExtResource("14_kn7gv")]
 transform = Transform3D(-1.9005e-07, 0, -4.34783, 0, 4.34783, 0, 4.34783, 0, -1.9005e-07, 4.34783, -3.88913, -7.3913)
@@ -839,13 +849,27 @@ wall_jump_upward_speed = -15.0
 dash_cooldown = 2.0
 wall_jump_horizontal_force = -15.0
 umbrella_jump_boost = 40.0
-acceleration_time = 0.01
 dash_speed = 40.0
 shoot_cooldown = 0.15
 max_charge_time = 0.5
 
 [node name="CutsceneEloisa" parent="." instance=ExtResource("49_nuysx")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.8, -5.97361, -47.2)
+
+[node name="DayNightSwitch" type="Node3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 28.2789, -8.69708, 6.44079)
+script = ExtResource("52_s7mvx")
+night_environment = ExtResource("53_4eenm")
+day_environment = ExtResource("54_4eenm")
+
+[node name="Sprite3D" type="Sprite3D" parent="DayNightSwitch"]
+texture = ExtResource("53_omxcq")
+
+[node name="Area3D" type="Area3D" parent="DayNightSwitch"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DayNightSwitch/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35651, 2.9901, 1.04618)
+shape = SubResource("BoxShape3D_4eenm")
 
 [connection signal="body_entered" from="block-moving2/Area3D" to="block-moving2" method="_on_body_entered"]
 [connection signal="body_exited" from="block-moving2/Area3D" to="block-moving2" method="_on_body_exited"]
@@ -856,3 +880,5 @@ transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.8, -
 [connection signal="body_exited" from="Camera Switch/Area3D" to="Camera Switch" method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="Character Switch/Area3D" to="Character Switch" method="_on_body_entered"]
 [connection signal="body_exited" from="Character Switch/Area3D" to="Character Switch" method="_on_body_exited"]
+[connection signal="body_entered" from="DayNightSwitch/Area3D" to="DayNightSwitch" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="DayNightSwitch/Area3D" to="DayNightSwitch" method="_on_area_3d_body_exited"]

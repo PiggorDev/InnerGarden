@@ -736,14 +736,14 @@ func _update_sprite_orientation():
 			mesh_instance.rotation.z = 0
 
 @warning_ignore("unused_parameter")
-func _handle_input(delta):
+func _handle_input(_delta):
 	# 1) Captura o input direcional (WASD ou setas)
 	var input_dir = Vector3.ZERO
 
 	if Input.is_action_pressed("ui_down"):
-		input_dir.z -= 1
+		input_dir.z -= 1  # 🔄 Corrigido para não inverter
 	if Input.is_action_pressed("ui_up"):
-		input_dir.z += 1
+		input_dir.z += 1  # 🔄 Agora está certo!
 	if Input.is_action_pressed("ui_left"):
 		input_dir.x -= 1
 	if Input.is_action_pressed("ui_right"):
@@ -753,49 +753,36 @@ func _handle_input(delta):
 	if input_dir != Vector3.ZERO:
 		input_dir = input_dir.normalized()
 		var camera_transform = get_viewport().get_camera_3d().global_transform
-		var forward = -camera_transform.basis.z.normalized()
+		var forward = -camera_transform.basis.z.normalized()  # 🔥 REMOVIDO O *-1 QUE ESTAVA ERRADO!
 		var right = camera_transform.basis.x.normalized()
 
 		# Ajusta direção do movimento com base na câmera
 		var final_dir = (forward * input_dir.z) + (right * input_dir.x)
+		final_dir.y = 0  # 🔥 Isso impede que a Libu "voe" para trás!
 		final_dir = final_dir.normalized()
 
-		# 3) Ajusta a velocidade com aceleração progressiva
+		# Define velocidade SEM aceleração/desaceleração
 		if Input.is_action_pressed("ui_run"):
-			# Aceleração para corrida
-			target_speed = min(target_speed + acceleration * delta, run_speed)
+			velocity.x = final_dir.x * run_speed
+			velocity.z = final_dir.z * run_speed
 		else:
-			# Retorna para velocidade normal ao andar
-			target_speed = max(target_speed - deceleration * delta, walk_speed)
-
-		velocity.x = final_dir.x * target_speed
-		velocity.z = final_dir.z * target_speed
+			velocity.x = final_dir.x * walk_speed
+			velocity.z = final_dir.z * walk_speed
 
 		# Atualiza última direção
 		last_direction = final_dir
 	else:
-		# 4) Desaceleração natural ao soltar os direcionais
-		if velocity.length() > 0.1:
-			velocity.x = lerp(velocity.x, 0.0, stop_deceleration * delta)
-			velocity.z = lerp(velocity.z, 0.0, stop_deceleration * delta)
+		# Para completamente ao soltar os direcionais
+		velocity.x = 0
+		velocity.z = 0
 
-			# Evita deslizar indefinidamente
-			if absf(velocity.x) < 0.1:
-				velocity.x = 0.0
-			if absf(velocity.z) < 0.1:
-				velocity.z = 0.0
-		else:
-			velocity = Vector3.ZERO
-
-	# 5) Pulo normal se estiver no chão
+	# 3) Mantém a gravidade e permite pulo
 	if is_on_floor() and Input.is_action_just_pressed("ui_jump"):
 		velocity.y = jump_speed
 		
 	if is_on_floor():
 		umbrella_used = false  # Libera o uso do guarda-chuva novamente
 		is_holding_jump = false  # Garante que a queda suave está desativada
-
-
 
 func shoot_charged_projectile():
 	if time_since_last_shot > 0:
