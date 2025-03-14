@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b1bogfswsi4m2"]
+[gd_scene load_steps=14 format=3 uid="uid://b1bogfswsi4m2"]
 
 [ext_resource type="Script" uid="uid://0pi3g4ugwe61" path="res://Scripts/Characters/libu.gd" id="1_0isec"]
 [ext_resource type="Script" uid="uid://c4yrl7bdm0k5y" path="res://Scripts/camera_3d.gd" id="2_ibpu5"]
@@ -6,15 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://b4fg1kjvanoah" path="res://Props/Level1/BOLAAZU.tscn" id="3_b0ant"]
 [ext_resource type="Script" uid="uid://b0qtt7d2wfext" path="res://shadow_handler.gd" id="4_6pc02"]
 [ext_resource type="PackedScene" uid="uid://dmpm1ekhycsqp" path="res://Assets/TreeMade/Charged Project.tscn" id="4_mhi7e"]
+[ext_resource type="Script" uid="uid://ctcl2wbia8dk6" path="res://Characters/camera_pivot.gd" id="5_2p8kj"]
 [ext_resource type="Texture2D" uid="uid://bquil233j415m" path="res://Sprites/shadow.tres" id="5_xd0lu"]
 [ext_resource type="Texture2D" uid="uid://dhq66aolvjq88" path="res://Sprites/pngtree-round-shadow-black-shadow-png-image_4330246.png" id="6_j0tps"]
 [ext_resource type="Texture2D" uid="uid://bp8i6bhwxd3nw" path="res://Sprites/LibuDraw/Libucolortes3.png" id="6_rqcqd"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_fnhhq"]
-size = Vector3(1, 1.7, 1)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bcdb"]
 size = Vector3(1, 1, 2.96)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fnhhq"]
+size = Vector3(1, 1.7, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6gcgl"]
 margin = 0.0
@@ -30,37 +31,73 @@ script = ExtResource("1_0isec")
 walk_speed = 12.0
 run_speed = 18.0
 gravity = -25.0
+jump_speed = null
+wall_jump_speed = null
+wall_jump_upward_speed = null
+wall_jump_force = null
+wall_slide_speed = null
+dash_cooldown = null
+dash_duration = null
+dash_multiplier = null
+wall_jump_horizontal_force = null
+wall_jump_upward_force = null
+wall_jump_max_angle = null
+wall_jump_restrict_mode = null
+coyote_time_duration = 0.25
+short_hop_gravity_multiplier = null
+fall_gravity_multiplier = null
 umbrella_jump_boost = 80.0
+acceleration_time = null
+deceleration_time = null
+stop_time = null
+max_speed = null
+friction_threshold = null
+dash_speed = null
 crosshair_scene = ExtResource("2_jh1w3")
 targeting_radius = 40.0
+crosshair_distance_threshold = null
+shoot_cooldown = null
 projectile_scene = ExtResource("3_b0ant")
+max_charge_time = null
 charged_projectile_scene = ExtResource("4_mhi7e")
+stick_time = null
+slide_time = null
+input_cooldown = null
+dash_input_window = null
+gentle_fall_speed = null
+vertical_jump_boost = null
 
-[node name="LibuCamera3D" type="Camera3D" parent="." node_paths=PackedStringArray("player")]
-transform = Transform3D(4.34783, 0, 0, 0, 3.07438, 3.07438, 0, -3.07438, 3.07438, 0, 10, 10)
-script = ExtResource("2_ibpu5")
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("player")]
+transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0, 10, 10)
+script = ExtResource("5_2p8kj")
 player = NodePath("..")
+min_pitch = -10.0
+max_pitch = 45.0
+
+[node name="LibuCamera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("player")]
+script = ExtResource("2_ibpu5")
+player = NodePath("../..")
 offset_distance = 8.0
 height = 3.5
 
-[node name="RayCast3D" type="RayCast3D" parent="LibuCamera3D"]
+[node name="RayCast3D" type="RayCast3D" parent="CameraPivot/LibuCamera3D"]
 transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)
 visible = false
 
-[node name="Transparency1" type="Area3D" parent="LibuCamera3D"]
+[node name="Transparency1" type="Area3D" parent="CameraPivot/LibuCamera3D"]
 transform = Transform3D(1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, 0.424264, -3.81838)
 visible = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LibuCamera3D/Transparency1"]
-transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0.441292, 0.709977)
-shape = SubResource("BoxShape3D_fnhhq")
-
-[node name="Transparency2" type="Area3D" parent="LibuCamera3D"]
+[node name="Transparency2" type="Area3D" parent="CameraPivot/LibuCamera3D"]
 visible = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LibuCamera3D/Transparency2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CameraPivot/LibuCamera3D/Transparency2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.41421)
 shape = SubResource("BoxShape3D_1bcdb")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="CameraPivot/LibuCamera3D/Transparency2"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707106, 0, 0.707106, 0.707107, 0, 0.0300522, -3.08122)
+shape = SubResource("BoxShape3D_fnhhq")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.017, 0, 0, 0, 0.017, 0, 0, 0, 0.017, 0, 0.157499, 0)
@@ -137,7 +174,7 @@ texture = ExtResource("6_j0tps")
 
 [node name="eyes" type="Node3D" parent="."]
 
-[connection signal="body_entered" from="LibuCamera3D/Transparency1" to="LibuCamera3D" method="_on_body_entered_area"]
-[connection signal="body_exited" from="LibuCamera3D/Transparency1" to="LibuCamera3D" method="_on_body_exited_area"]
-[connection signal="body_entered" from="LibuCamera3D/Transparency2" to="LibuCamera3D" method="_on_body_entered_area"]
-[connection signal="body_exited" from="LibuCamera3D/Transparency2" to="LibuCamera3D" method="_on_body_exited_area"]
+[connection signal="body_entered" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_exited_area"]
+[connection signal="body_entered" from="CameraPivot/LibuCamera3D/Transparency2" to="CameraPivot/LibuCamera3D" method="_on_body_entered_area"]
+[connection signal="body_exited" from="CameraPivot/LibuCamera3D/Transparency2" to="CameraPivot/LibuCamera3D" method="_on_body_exited_area"]

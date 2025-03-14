@@ -11,16 +11,15 @@ config_version=5
 [application]
 
 config/name="Inner Garden"
-run/main_scene="res://Scenes/cena_principal.tscn"
+run/main_scene="uid://jqm88ic58orn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-WindowManager="res://Scripts/System/window_manager.gd"
+WindowManager="*res://Scripts/System/window_manager.gd"
 Global="*res://Scripts/System/Global.gd"
 HealthManager="*res://Scripts/System/HealthManager.gd"
-BackupManager="*res://BackupManager.gd"
 
 [display]
 

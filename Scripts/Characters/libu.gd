@@ -14,6 +14,7 @@ extends CharacterBody3D
 @onready var collision_shape = $LibuShape  # Substitua pelo caminho correto para o CollisionShape3D
 @onready var camera = $LibuCamera3D  # Atualize para o caminho correto
 @onready var world_env = $"../WorldEnvironment"  # Ajuste o caminho conforme necessário
+
 # Velocidades
 
 @export var walk_speed: float = 5.0  # Velocidade ao andar normalmente
@@ -741,27 +742,35 @@ func _handle_input(_delta):
 	var input_dir = Vector3.ZERO
 
 	if Input.is_action_pressed("ui_down"):
-		input_dir.z -= 1  # 🔄 Corrigido para não inverter
+		input_dir.z -= 1  
 	if Input.is_action_pressed("ui_up"):
-		input_dir.z += 1  # 🔄 Agora está certo!
+		input_dir.z += 1  
 	if Input.is_action_pressed("ui_left"):
 		input_dir.x -= 1
 	if Input.is_action_pressed("ui_right"):
 		input_dir.x += 1
 
-	# 2) Ajusta direção com base na câmera
+	# 2) Ajusta direção com base na câmera (opcional)
 	if input_dir != Vector3.ZERO:
 		input_dir = input_dir.normalized()
-		var camera_transform = get_viewport().get_camera_3d().global_transform
-		var forward = -camera_transform.basis.z.normalized()  # 🔥 REMOVIDO O *-1 QUE ESTAVA ERRADO!
-		var right = camera_transform.basis.x.normalized()
 
-		# Ajusta direção do movimento com base na câmera
-		var final_dir = (forward * input_dir.z) + (right * input_dir.x)
-		final_dir.y = 0  # 🔥 Isso impede que a Libu "voe" para trás!
-		final_dir = final_dir.normalized()
+		# 🔥 Se quiser que a direção siga a câmera, ative esta parte:
+		var use_camera_direction = true  # Mude para false se quiser direção fixa
 
-		# Define velocidade SEM aceleração/desaceleração
+		if use_camera_direction:
+			var camera_transform = get_viewport().get_camera_3d().global_transform
+			var forward = -camera_transform.basis.z.normalized()
+			var right = camera_transform.basis.x.normalized()
+
+			# Ajusta direção do movimento com base na câmera
+			var final_dir = (forward * input_dir.z) + (right * input_dir.x)
+			final_dir.y = 0  # 🔥 Isso impede que a Libu "voe" para trás!
+			final_dir = final_dir.normalized()
+		else:
+			# Direção fixa (independente da câmera)
+			var final_dir = Vector3(input_dir.x, 0, input_dir.z).normalized()
+
+		# 3) Define velocidade baseada no tipo de movimento
 		if Input.is_action_pressed("ui_run"):
 			velocity.x = final_dir.x * run_speed
 			velocity.z = final_dir.z * run_speed
@@ -776,13 +785,15 @@ func _handle_input(_delta):
 		velocity.x = 0
 		velocity.z = 0
 
-	# 3) Mantém a gravidade e permite pulo
+	# 4) Mantém a gravidade e permite pulo
 	if is_on_floor() and Input.is_action_just_pressed("ui_jump"):
 		velocity.y = jump_speed
-		
+
+	# 5) Gerencia estados do guarda-chuva
 	if is_on_floor():
 		umbrella_used = false  # Libera o uso do guarda-chuva novamente
 		is_holding_jump = false  # Garante que a queda suave está desativada
+
 
 func shoot_charged_projectile():
 	if time_since_last_shot > 0:

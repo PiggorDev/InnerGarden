@@ -13,6 +13,13 @@ extends Camera3D
 @onready var eyes = $"../eyes"  # Referência ao nó 3D chamado "eyes"
 @onready var mesh_instance = $"../Sprite3D"
 @onready var crosshair = $CrossHair/Mira # Caminho até o nó do crosshair
+@onready var camera_pivot = get_parent()
+
+
+
+
+
+
 # Valores máximos e mínimos para o zoom
 @export var max_offset_distance: float = 8
 @export var min_offset_distance: float = 2
@@ -58,48 +65,51 @@ var is_camera_locked: bool = false
 
 
 func _ready():
-	if not player:
-		player = get_parent()
-		if not player:
-			print("Erro: jogador (player) não configurado!")
-			return
-	print("Câmera configurada com o jogador: ", player.name)
-	raycast.enabled = true
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	yaw = rotation_degrees.y
-	pitch = rotation_degrees.x
+	print("🔍 Debug: Procurando CameraPivot...")
+
+	# Testa primeiro pegando o nó pai
+	if get_parent():
+		print("✅ Pai da câmera encontrado:", get_parent().name)
 	
-	# Salva o offset inicial da câmera em relação ao jogador
-	initial_camera_offset = global_transform.origin - player.global_transform.origin
-	# Conectar os sinais das áreas
+	# Testa se CameraPivot é o pai
+	var camera_pivot = get_parent()
+	if camera_pivot and camera_pivot.name == "CameraPivot":
+		print("✅ CameraPivot encontrado como pai!")
+	else:
+		print("⚠️ CameraPivot NÃO é o pai da câmera, tentando outro método...")
+
+		# Testa pegando um nível acima (se CameraPivot estiver em Libu)
+		if get_node_or_null("../CameraPivot"):
+			camera_pivot = get_node("../CameraPivot")
+			print("✅ CameraPivot encontrado usando '../CameraPivot'!")
+		elif get_node_or_null("../../CameraPivot"):
+			camera_pivot = get_node("../../CameraPivot")
+			print("✅ CameraPivot encontrado usando '../../CameraPivot'!")
+		else:
+			print("❌ ERRO: CameraPivot NÃO foi encontrado em nenhum lugar!")
+
+	# Teste final: Se ainda não encontrou, imprime a estrutura
+	if not camera_pivot:
+		print("📌 Estrutura da cena pode estar errada. Verifique o Scene Tree.")
 
 
 func _input(event):
-	if Global.is_inventory_open:
-		return
-	if is_camera_locked:
-		return  # Bloqueia a rotação da câmera
-	
-	# 📌 Zoom da câmera com a roda do mouse
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			offset_distance = max(offset_distance - zoom_speed, min_offset_distance)
-			height = max(height - zoom_speed * 0.6, min_height)  # Ajuste para manter proporção
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			offset_distance = min(offset_distance + zoom_speed, max_offset_distance)
-			height = min(height + zoom_speed * 0.6, max_height)
-
+	# 📌 Controle de rotação (yaw e pitch)
 	if event is InputEventMouseMotion:
-		if is_first_person_active:
-			yaw -= event.relative.x * sensitivity
-			pitch -= event.relative.y * sensitivity
-			pitch = clamp(pitch, min_pitch, max_pitch)
-		else:
-			yaw -= event.relative.x * sensitivity
-			pitch -= event.relative.y * sensitivity
-			pitch = clamp(pitch, min_pitch, max_pitch)
+		yaw -= event.relative.x * sensitivity
+		pitch -= event.relative.y * sensitivity
+		pitch = clamp(pitch, min_pitch, max_pitch)  # Mantém dentro dos limites
 
-		rotation_degrees = Vector3(pitch, yaw, 0)
+		# Aplica a rotação horizontal na câmera
+		rotation_degrees.y = yaw  
+
+		# Aplica a rotação vertical no CameraPivot
+		if camera_pivot:
+			camera_pivot.rotation_degrees.x = pitch  # Aplica o Pitch corretamente
+			print("🎥 Pitch aplicado no CameraPivot:", camera_pivot.rotation_degrees.x)
+		else:
+			print("⚠️ CameraPivot não encontrado!")
+
 
 func _process(delta):
 	if Global.is_inventory_open:
@@ -117,14 +127,20 @@ func _process(delta):
 
 
 func _update_camera_position():
-	var horizontal_offset = Vector3(
-		offset_distance * sin(deg_to_rad(yaw)),
-		0,
-		offset_distance * cos(deg_to_rad(yaw))
-	)
-	global_transform.origin = player.global_transform.origin + horizontal_offset
-	global_transform.origin.y = player.global_transform.origin.y + height
-	look_at(player.global_transform.origin, Vector3.UP)
+	if not player or not camera_pivot:
+		return
+
+	# Atualiza a posição do CameraPivot para seguir o jogador
+	camera_pivot.global_transform.origin = player.global_transform.origin
+
+
+	# Calcula o deslocamento da câmera baseado no CameraPivot
+	var direction = -camera_pivot.global_transform.basis.z.normalized()
+	global_transform.origin = camera_pivot.global_transform.origin + (direction * offset_distance)
+
+	# Faz a câmera olhar para o CameraPivot, garantindo um foco mais estável
+	look_at(camera_pivot.global_transform.origin, Vector3.UP)
+
 
 func _update_side_scroll_position():
 	var side_scroll_target_position = player.global_transform.origin + side_scroll_offset
