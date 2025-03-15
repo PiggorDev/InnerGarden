@@ -12,7 +12,7 @@ extends CharacterBody3D
 @onready var charge_light = $ChargeLight # Referência ao efeito de luz
 @onready var shadow_handler = $ShadowHandler
 @onready var collision_shape = $LibuShape  # Substitua pelo caminho correto para o CollisionShape3D
-@onready var camera = $LibuCamera3D  # Atualize para o caminho correto
+@onready var camera = $CameraPivot/LibuCamera3D  # Atualize para o caminho correto
 @onready var world_env = $"../WorldEnvironment"  # Ajuste o caminho conforme necessário
 
 # Velocidades
@@ -138,6 +138,7 @@ var input_direction: Vector3 = Vector3.ZERO  # Direção do input do jogador no 
 var is_imagination_active = false
 
 func _ready():
+	
 	$Sprite3D/IteminHand.visible = false  # Item começa invisível
 	
 	# Calcula taxas de aceleração e desaceleração baseadas no tempo desejado
@@ -674,30 +675,36 @@ func shoot_projectile():
 		var projectile = projectile_scene.instantiate()
 		get_parent().add_child(projectile)
 
+		# 🔹 No modo de primeira pessoa, atira da câmera
 		if is_first_person_active:
 			var camera = get_viewport().get_camera_3d()
 			if camera:
-				# Origem do tiro: um pouco à frente da câmera
 				projectile.global_transform.origin = camera.global_transform.origin + camera.global_transform.basis.z * -1.5
 				
-				# **Se há um alvo, o projétil segue ele**
+				# Direção do tiro sempre segue a mira da câmera
+				var shoot_direction = -camera.global_transform.basis.z.normalized()
+				
+				# Se houver um alvo, faz o projétil ser teleguiado
 				if current_target and current_target.is_inside_tree():
-					projectile.set_target(current_target)  # 🔥 Torna o tiro teleguiado
+					projectile.set_target(current_target)
 				else:
-					# Direção da câmera caso não tenha alvo
-					var shoot_direction = -camera.global_transform.basis.z.normalized()
 					projectile.set_velocity(shoot_direction)
+
+		# 🔹 No modo de terceira pessoa, atira do ponto de disparo e segue a última direção da Libu
 		else:
-			# Caso não esteja em primeira pessoa, usa a lógica padrão
 			projectile.global_transform.origin = shoot_origin.global_transform.origin
 
+			# **Se há um alvo, o tiro segue o inimigo**
 			if current_target and current_target.is_inside_tree():
-				projectile.set_target(current_target)  # 🔥 Mantém o alvo para seguir!
+				projectile.set_target(current_target)
 			else:
+				# 🔥 Agora o tiro segue a última direção de movimento da Libu!
 				var shoot_direction = last_direction
-				shoot_direction.y = 0
-				shoot_direction = shoot_direction.normalized()
-				projectile.set_velocity(shoot_direction)
+				if shoot_direction.length() == 0:
+					# Caso Libu esteja parada, o tiro segue a direção para frente
+					shoot_direction = -global_transform.basis.z.normalized()
+				
+				projectile.set_velocity(shoot_direction.normalized())
 
 		# Configurações do projétil
 		projectile.damage = 1
@@ -709,9 +716,9 @@ func shoot_projectile():
 
 		# Reseta o cooldown
 		time_since_last_shot = shoot_cooldown
-		print("Projétil disparado.")
 	else:
-		print("Debug: Cena de projétil não configurada!")
+		print("⚠️ Debug: Cena de projétil não configurada!")
+
 
 func _on_projectile_body_entered(body):
 	if body.name == "HikaruEvil":  # Verifica se o objeto atingido é o Hikaru
@@ -750,6 +757,9 @@ func _handle_input(_delta):
 	if Input.is_action_pressed("ui_right"):
 		input_dir.x += 1
 
+	# Variável final_dir deve ser declarada antes do bloco condicional
+	var final_dir = Vector3.ZERO  
+
 	# 2) Ajusta direção com base na câmera (opcional)
 	if input_dir != Vector3.ZERO:
 		input_dir = input_dir.normalized()
@@ -763,14 +773,15 @@ func _handle_input(_delta):
 			var right = camera_transform.basis.x.normalized()
 
 			# Ajusta direção do movimento com base na câmera
-			var final_dir = (forward * input_dir.z) + (right * input_dir.x)
+			final_dir = (forward * input_dir.z) + (right * input_dir.x)
 			final_dir.y = 0  # 🔥 Isso impede que a Libu "voe" para trás!
 			final_dir = final_dir.normalized()
 		else:
 			# Direção fixa (independente da câmera)
-			var final_dir = Vector3(input_dir.x, 0, input_dir.z).normalized()
+			final_dir = Vector3(input_dir.x, 0, input_dir.z).normalized()
 
-		# 3) Define velocidade baseada no tipo de movimento
+	# 3) Define velocidade baseada no tipo de movimento
+	if final_dir != Vector3.ZERO:  # Somente movimenta se houver input
 		if Input.is_action_pressed("ui_run"):
 			velocity.x = final_dir.x * run_speed
 			velocity.z = final_dir.z * run_speed

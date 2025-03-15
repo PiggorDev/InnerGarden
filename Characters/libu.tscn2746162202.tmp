@@ -38,10 +38,10 @@ targeting_radius = 40.0
 projectile_scene = ExtResource("3_b0ant")
 charged_projectile_scene = ExtResource("4_mhi7e")
 
-[node name="CameraPivot" type="Node3D" parent="."]
+[node name="CameraPivot" type="Node3D" parent="." node_paths=PackedStringArray("player")]
 transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0, 10, 10)
 script = ExtResource("5_2p8kj")
-sensitivity = 0.002
+player = NodePath("..")
 min_pitch = -10.0
 max_pitch = 45.0
 
@@ -50,9 +50,6 @@ script = ExtResource("2_ibpu5")
 player = NodePath("../..")
 offset_distance = 8.0
 height = 3.5
-min_pitch = -10.0
-max_pitch = 45.0
-side_scroll_offset = Vector3(0, 5, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/LibuCamera3D"]
 transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)
@@ -147,7 +144,6 @@ shaded = true
 texture = ExtResource("6_j0tps")
 
 [node name="eyes" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24, 0)
 
 [connection signal="body_entered" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_entered_area"]
 [connection signal="body_exited" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_exited_area"]

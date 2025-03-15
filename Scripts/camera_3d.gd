@@ -10,7 +10,7 @@ extends Camera3D
 @onready var transparency_area_1: Area3D = $Transparency1
 @onready var transparency_area_2: Area3D = $Transparency2
 @onready var VanessaShape = $"../VanessaShape"
-@onready var eyes = $"../eyes"  # Referência ao nó 3D chamado "eyes"
+@onready var eyes = $"../../eyes"  # Referência ao nó 3D chamado "eyes"$"../../eyes"
 @onready var mesh_instance = $"../Sprite3D"
 @onready var crosshair = $CrossHair/Mira # Caminho até o nó do crosshair
 @onready var camera_pivot = get_parent()
@@ -92,26 +92,45 @@ func _ready():
 	if not camera_pivot:
 		print("📌 Estrutura da cena pode estar errada. Verifique o Scene Tree.")
 
-
 func _input(event):
-	# 📌 Controle de rotação (yaw e pitch)
+	# 🔹 Bloqueia rotação da câmera no modo Side Scroll
+	if is_side_scroll_active and event is InputEventMouseMotion:
+		return  # Ignora eventos do mouse para evitar mudanças na câmera
+
+	# 🎮 Controle de rotação (Yaw e Pitch) - Movimento do mouse gira a câmera corretamente
 	if event is InputEventMouseMotion:
 		yaw -= event.relative.x * sensitivity
 		pitch -= event.relative.y * sensitivity
-		pitch = clamp(pitch, min_pitch, max_pitch)  # Mantém dentro dos limites
 
-		# Aplica a rotação horizontal na câmera
-		rotation_degrees.y = yaw  
+		# 🔹 Limita o pitch para evitar virar de cabeça para baixo
+		pitch = clamp(pitch, min_pitch, max_pitch)
 
-		# Aplica a rotação vertical no CameraPivot
 		if camera_pivot:
-			camera_pivot.rotation_degrees.x = pitch  # Aplica o Pitch corretamente
-			print("🎥 Pitch aplicado no CameraPivot:", camera_pivot.rotation_degrees.x)
-		else:
-			print("⚠️ CameraPivot não encontrado!")
+			# 🔹 Aplica a rotação horizontal ao CameraPivot (esquerda/direita)
+			camera_pivot.rotation_degrees.y = yaw  
 
+			# 🔹 Aplica a rotação vertical na câmera (movimento para cima/baixo)
+			rotation_degrees.x = pitch  
+
+		# 🔹 Atualiza a posição da câmera sem interferir no zoom
+		_update_camera_position()
+
+	# 🔍 Controle de Zoom com a rodinha do mouse (somente no modo normal)
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			offset_distance = max(min_offset_distance, offset_distance - zoom_speed)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			offset_distance = min(max_offset_distance, offset_distance + zoom_speed)
+
+		# 🔹 Atualiza a posição da câmera APÓS o zoom
+		_update_camera_position()
 
 func _process(delta):
+	if is_side_scroll_active:
+		# 🚫 Mantém a posição correta da câmera, mas não bloqueia zoom
+		_update_side_scroll_position()
+		return  # Sai da função, impedindo outras atualizações inesperadas
+
 	if Global.is_inventory_open:
 		return  # Bloqueia toda movimentação e rotação da câmera
 
@@ -125,27 +144,41 @@ func _process(delta):
 		elif not is_first_person_active:  # Só atualiza a câmera se não estiver no modo de primeira pessoa
 			_update_camera_position()
 
-
 func _update_camera_position():
 	if not player or not camera_pivot:
 		return
 
-	# Atualiza a posição do CameraPivot para seguir o jogador
+	# Mantém a posição do CameraPivot alinhada ao jogador
 	camera_pivot.global_transform.origin = player.global_transform.origin
 
-
-	# Calcula o deslocamento da câmera baseado no CameraPivot
+	# Define a direção da câmera com base na rotação do CameraPivot
 	var direction = -camera_pivot.global_transform.basis.z.normalized()
 	global_transform.origin = camera_pivot.global_transform.origin + (direction * offset_distance)
 
-	# Faz a câmera olhar para o CameraPivot, garantindo um foco mais estável
+	# Garante que a câmera olhe para o personagem
 	look_at(camera_pivot.global_transform.origin, Vector3.UP)
 
 
 func _update_side_scroll_position():
+	if not player:
+		return  # 🚫 Evita erros caso o player não esteja definido
+
+	# 📌 Ajusta a posição da câmera para seguir o jogador APENAS no eixo X e Y
 	var side_scroll_target_position = player.global_transform.origin + side_scroll_offset
-	global_transform.origin = side_scroll_target_position
-	look_at(player.global_transform.origin, Vector3.UP)
+
+
+
+	# 🔹 Movimenta suavemente a câmera para evitar tremores bruscos
+	global_transform.origin = global_transform.origin.lerp(side_scroll_target_position, 0.15)
+
+	# 🔹 Travamos a rotação da câmera para evitar que ela gire sozinha
+	rotation_degrees = Vector3.ZERO
+
+	# 🔹 Desativa qualquer influência do CameraPivot no side-scroll
+	if camera_pivot:
+		camera_pivot.rotation_degrees = Vector3.ZERO
+		camera_pivot.global_transform.origin = player.global_transform.origin  
+
 
 func _update_transition(delta):
 	var target_position: Vector3
@@ -153,17 +186,65 @@ func _update_transition(delta):
 		target_position = player.global_transform.origin + side_scroll_offset
 	else:
 		target_position = _calculate_normal_camera_position()
-	global_transform.origin = global_transform.origin.lerp(target_position, delta / transition_time)
+
+	# 🔥 Agora a transição é suave e acontece no tempo certo
+	global_transform.origin = global_transform.origin.lerp(target_position, delta * 5.0)
 	look_at(player.global_transform.origin, Vector3.UP)
+
+	# 🔹 Finaliza a transição quando a câmera chegar ao destino
 	if global_transform.origin.distance_to(target_position) < 0.1:
 		transitioning = false
 		if is_side_scroll_active:
 			_update_side_scroll_position()
 		else:
 			_update_camera_position()
-		if not is_side_scroll_active:
-			_restore_mouse_control()
 
+
+func activate_first_person():
+	if is_first_person_active:
+		return  # Se já estiver ativado, não faz nada
+
+	is_first_person_active = true
+	is_side_scroll_active = false
+	transitioning = false
+	emit_signal("first_person_toggled", true)
+
+	# 🔹 Remove a câmera do CameraPivot para evitar influências
+	if camera_pivot and get_parent() == camera_pivot:
+		reparent(player)  # Move a câmera para o player diretamente
+	
+	# 🔹 Posiciona a câmera na altura dos olhos
+	if eyes:
+		global_transform.origin = eyes.global_transform.origin
+	else:
+		global_transform.origin = player.global_transform.origin + Vector3(0, eye_height, 0)
+
+	# 🔹 Reseta a rotação para evitar ângulos errados ao entrar no modo FPS
+	rotation_degrees = Vector3.ZERO  
+	global_transform.basis = player.global_transform.basis  # Define a rotação inicial baseada no jogador
+
+	# 🔹 Ativa a mira no modo de primeira pessoa
+	if crosshair:
+		crosshair.visible = true
+
+	# 🔹 Captura o mouse para controle total da visão
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+# 🔹 Função para sair do modo First Person
+func deactivate_first_person():
+	if is_first_person_active:
+		is_first_person_active = false
+		emit_signal("first_person_toggled", false)
+
+		# 🔹 Esconde a mira fora do modo de primeira pessoa
+		if crosshair:
+			crosshair.visible = false
+
+		# 🔹 Mantém o mouse capturado para esconder o cursor
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+
+		
 func _calculate_normal_camera_position() -> Vector3:
 	return player.global_transform.origin + Vector3(
 		offset_distance * sin(deg_to_rad(yaw)),
@@ -175,11 +256,24 @@ func activate_side_scroll():
 	if not is_side_scroll_active:
 		is_side_scroll_active = true
 		is_first_person_active = false
+		transitioning = true  
+
+		# 🔹 Move a câmera diretamente, ignorando o CameraPivot
+		global_transform.origin = player.global_transform.origin + side_scroll_offset
+
+		# 🔹 Reseta rotação da câmera e do pivot para evitar inclinações estranhas
+		rotation_degrees = Vector3.ZERO
+		if camera_pivot:
+			camera_pivot.rotation_degrees = Vector3.ZERO  # 🔥 Mantém o Pivot no lugar certo
+			camera_pivot.global_transform.origin = player.global_transform.origin
+
+		# 🔹 Captura o mouse apenas para cliques, sem movimentação de câmera
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		
+func deactivate_side_scroll():
+	if is_side_scroll_active:
+		is_side_scroll_active = false
 		transitioning = true
-
-		# Certifique-se de capturar o mouse mesmo no modo Side Scroll
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 func _restore_mouse_control():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -261,43 +355,7 @@ func _on_body_exited_area(body):
 		if mesh_instance:
 			_remove_transparency(mesh_instance)
 
-func activate_first_person():
-	if not is_first_person_active:
-		is_first_person_active = true
-		is_side_scroll_active = false
-		transitioning = false
-		emit_signal("first_person_toggled", true)
 
-		# Centraliza a câmera no modo de primeira pessoa
-		var camera = get_viewport().get_camera_3d()
-		if eyes:
-			global_transform.origin = eyes.global_transform.origin
-
-		# Faz a câmera olhar para frente
-		look_at(global_transform.origin + -camera.global_transform.basis.z, Vector3.UP)
-
-		# Mostra o crosshair no modo de primeira pessoa
-		if crosshair:
-			crosshair.visible = true
-
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-func deactivate_first_person():
-	if is_first_person_active:
-		is_first_person_active = false
-		emit_signal("first_person_toggled", false)
-
-		# Esconde o crosshair fora do modo de primeira pessoa
-		if crosshair:
-			crosshair.visible = false
-
-		# Mantém o mouse capturado para esconder o cursor
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
-func deactivate_side_scroll():
-	if is_side_scroll_active:
-		is_side_scroll_active = false
-		transitioning = true
 
 func fix_camera_before_inventory():
 	# Atualiza a rotação final antes de bloquear os inputs
