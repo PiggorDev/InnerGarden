@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var shoot_origin = $ShootOrigin # Referência ao ponto de disparo
+@onready var shoot_ray = $LibuCamera3D/RayCast3D  # RayCast3D da câmera para atirar no modo primeira pessoa
 @onready var raycast_wall_front = $WallRayCastFront
 @onready var raycast_wall_back = $WallRayCastBack
 @onready var raycast_wall_left = $WallRayCastLeft
@@ -14,8 +15,9 @@ extends CharacterBody3D
 @onready var collision_shape = $LibuShape  # Substitua pelo caminho correto para o CollisionShape3D
 @onready var camera = $CameraPivot/LibuCamera3D  # Atualize para o caminho correto
 @onready var world_env = $"../WorldEnvironment"  # Ajuste o caminho conforme necessário
-
+@export var side_scroll_rotation: float = 0.0  # Ângulo da câmera no Side Scroll
 # Velocidades
+
 
 @export var walk_speed: float = 5.0  # Velocidade ao andar normalmente
 @export var run_speed: float = 10.0
@@ -665,59 +667,82 @@ func perform_wall_jump():
 		await get_tree().create_timer(wall_jump_timer).timeout
 		is_wall_jumping = false  # Finaliza o estado de Wall Jump
 
-@onready var shoot_ray = $LibuCamera3D/RayCast3D  # Referência ao RayCast3D dentro da câmera
-
 func shoot_projectile():
+	print("🚀 Tentando disparar um tiro!")
+
 	if time_since_last_shot > 0:
-		return  # Respeita o cooldown de disparo
+		print("❌ Cooldown ativo. Não pode disparar ainda!")
+		return  # Evita disparos consecutivos
 
-	if projectile_scene:
-		var projectile = projectile_scene.instantiate()
-		get_parent().add_child(projectile)
+	if projectile_scene == null:
+		print("⚠️ Erro: projectile_scene não está definido! O projétil não foi carregado.")
+		return
 
-		# 🔹 No modo de primeira pessoa, atira da câmera
-		if is_first_person_active:
-			var camera = get_viewport().get_camera_3d()
-			if camera:
-				projectile.global_transform.origin = camera.global_transform.origin + camera.global_transform.basis.z * -1.5
-				
-				# Direção do tiro sempre segue a mira da câmera
-				var shoot_direction = -camera.global_transform.basis.z.normalized()
-				
-				# Se houver um alvo, faz o projétil ser teleguiado
-				if current_target and current_target.is_inside_tree():
-					projectile.set_target(current_target)
-				else:
-					projectile.set_velocity(shoot_direction)
+	# Cria o projétil
+	var projectile = projectile_scene.instantiate()
+	if projectile == null:
+		print("❌ Erro: Falha ao instanciar o projétil!")
+		return
 
-		# 🔹 No modo de terceira pessoa, atira do ponto de disparo e segue a última direção da Libu
-		else:
-			projectile.global_transform.origin = shoot_origin.global_transform.origin
+	get_parent().add_child(projectile)
+	print("✅ Projétil instanciado!")
 
-			# **Se há um alvo, o tiro segue o inimigo**
-			if current_target and current_target.is_inside_tree():
-				projectile.set_target(current_target)
-			else:
-				# 🔥 Agora o tiro segue a última direção de movimento da Libu!
-				var shoot_direction = last_direction
-				if shoot_direction.length() == 0:
-					# Caso Libu esteja parada, o tiro segue a direção para frente
-					shoot_direction = -global_transform.basis.z.normalized()
-				
-				projectile.set_velocity(shoot_direction.normalized())
+	var shoot_direction: Vector3 = Vector3.ZERO  
 
-		# Configurações do projétil
-		projectile.damage = 1
-		projectile.scale = Vector3(1, 1, 1)
+	# **Modo Primeira Pessoa: tiro sai da câmera**
+	if is_first_person_active:
+		var camera = get_viewport().get_camera_3d()
+		if camera:
+			# 🔹 O tiro nasce exatamente na frente da câmera
+			var spawn_offset = -camera.global_transform.basis.z * 1.5
+			projectile.global_transform.origin = camera.global_transform.origin + spawn_offset
 
-		# Ignora colisões com o jogador
-		if projectile.has_method("add_exception"):
-			projectile.add_exception(self)
+			# 🔹 Agora garantimos que a direção está correta
+			shoot_direction = -camera.global_transform.basis.z.normalized()
 
-		# Reseta o cooldown
-		time_since_last_shot = shoot_cooldown
+			# **🔍 Confirmação do Debug**
+			print("🎯 Tiro FPS saindo da câmera:", projectile.global_transform.origin)
+			print("➡️ Direção FPS antes do ajuste:", shoot_direction)
+
+	# **Modo Terceira Pessoa: tiro sai do `ShootOrigin`**
 	else:
-		print("⚠️ Debug: Cena de projétil não configurada!")
+		projectile.global_transform.origin = shoot_origin.global_transform.origin
+
+		# Se há um alvo, o tiro segue ele
+		if current_target and current_target.is_inside_tree():
+			projectile.set_target(current_target)
+			print("🎯 Projétil teleguiado ativado!")
+			return
+
+		# Caso contrário, dispara na direção do personagem
+		shoot_direction = last_direction if last_direction.length() > 0 else -global_transform.basis.z.normalized()
+
+	# **🔥 Ajuste final do vetor**
+	shoot_direction = shoot_direction.normalized()
+
+	# **Força um tiro reto**
+	if is_first_person_active:
+		shoot_direction.y = 0  # Mantém o tiro reto para evitar desvios inesperados
+
+	# **Aplica a direção ao projétil**
+	projectile.set_velocity(shoot_direction * 50)  # 🔥 Agora o projétil sai rápido e reto
+
+	# Debug de posição e velocidade
+	print("📌 Projétil POSIÇÃO inicial:", projectile.global_transform.origin)
+	print("📌 Projétil VELOCIDADE inicial:", shoot_direction * 50)
+
+	# Configurações do projétil
+	projectile.damage = 1
+	projectile.scale = Vector3(1, 1, 1)
+
+	# Ignora colisões com o jogador
+	if projectile.has_method("add_exception"):
+		projectile.add_exception(self)
+		print("🚫 Projétil agora ignora colisões com o jogador.")
+
+	# Reseta cooldown
+	time_since_last_shot = shoot_cooldown
+
 
 
 func _on_projectile_body_entered(body):
