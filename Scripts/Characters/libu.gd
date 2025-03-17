@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @onready var shoot_origin = $ShootOrigin # Referência ao ponto de disparo
-@onready var shoot_ray = $LibuCamera3D/RayCast3D  # RayCast3D da câmera para atirar no modo primeira pessoa
+@onready var shoot_ray = $CameraPivot/LibuCamera3D/RayCast3D  # RayCast3D da câmera para atirar no modo primeira pessoa$CameraPivot/LibuCamera3D
 @onready var raycast_wall_front = $WallRayCastFront
 @onready var raycast_wall_back = $WallRayCastBack
 @onready var raycast_wall_left = $WallRayCastLeft
@@ -241,6 +241,8 @@ func _input(event):
 		update_imagination_filter()
 
 func _process(delta):
+	if is_first_person_active:
+		print("📌 🔄 _process rodando! FPS ainda ativo? ->", is_first_person_active)
 
 	_update_sprite_orientation()
 	handle_crosshair(delta)
@@ -666,84 +668,75 @@ func perform_wall_jump():
 
 		await get_tree().create_timer(wall_jump_timer).timeout
 		is_wall_jumping = false  # Finaliza o estado de Wall Jump
-
 func shoot_projectile():
 	print("🚀 Tentando disparar um tiro!")
 
+	# Verifica cooldown
 	if time_since_last_shot > 0:
 		print("❌ Cooldown ativo. Não pode disparar ainda!")
-		return  # Evita disparos consecutivos
+		return
 
+	# Verifica se a cena do projétil está definida
 	if projectile_scene == null:
 		print("⚠️ Erro: projectile_scene não está definido! O projétil não foi carregado.")
 		return
 
-	# Cria o projétil
+	# Instancia o projétil
 	var projectile = projectile_scene.instantiate()
 	if projectile == null:
 		print("❌ Erro: Falha ao instanciar o projétil!")
 		return
 
-	get_parent().add_child(projectile)
-	print("✅ Projétil instanciado!")
-
-	var shoot_direction: Vector3 = Vector3.ZERO  
-
-	# **Modo Primeira Pessoa: tiro sai da câmera**
+	# 🔥 Define a posição inicial do projétil SEMPRE na Libu
 	if is_first_person_active:
 		var camera = get_viewport().get_camera_3d()
 		if camera:
-			# 🔹 O tiro nasce exatamente na frente da câmera
-			var spawn_offset = -camera.global_transform.basis.z * 1.5
-			projectile.global_transform.origin = camera.global_transform.origin + spawn_offset
-
-			# 🔹 Agora garantimos que a direção está correta
-			shoot_direction = -camera.global_transform.basis.z.normalized()
-
-			# **🔍 Confirmação do Debug**
-			print("🎯 Tiro FPS saindo da câmera:", projectile.global_transform.origin)
-			print("➡️ Direção FPS antes do ajuste:", shoot_direction)
-
-	# **Modo Terceira Pessoa: tiro sai do `ShootOrigin`**
+			projectile.global_transform.origin = camera.global_transform.origin + camera.global_transform.basis.z * -1.5
 	else:
 		projectile.global_transform.origin = shoot_origin.global_transform.origin
 
-		# Se há um alvo, o tiro segue ele
-		if current_target and current_target.is_inside_tree():
-			projectile.set_target(current_target)
-			print("🎯 Projétil teleguiado ativado!")
-			return
+	# Definir a direção do tiro
+	var shoot_direction: Vector3 = Vector3.ZERO
 
-		# Caso contrário, dispara na direção do personagem
-		shoot_direction = last_direction if last_direction.length() > 0 else -global_transform.basis.z.normalized()
+	# 🔥 **Modo Teleguiado (Se houver um alvo)**
+	if current_target and current_target.is_inside_tree():
+		projectile.set_target(current_target)  # Aplica o alvo para teleguiado
+		shoot_direction = (current_target.global_transform.origin - projectile.global_transform.origin).normalized()
+		print("🎯 🔥 Tiro teleguiado no alvo:", current_target.name)
 
-	# **🔥 Ajuste final do vetor**
-	shoot_direction = shoot_direction.normalized()
+	# 🟢 **Modo Primeira Pessoa (Sem alvo)**
+	elif is_first_person_active:
+		var camera = get_viewport().get_camera_3d()
+		if camera:
+			shoot_direction = -camera.global_transform.basis.z  # Direção da câmera para frente
+			print("📌 🔄 Projétil FPS saiu da câmera na direção:", shoot_direction)
 
-	# **Força um tiro reto**
-	if is_first_person_active:
-		shoot_direction.y = 0  # Mantém o tiro reto para evitar desvios inesperados
+	# 🔵 **Modo Terceira Pessoa (Sem alvo)**
+	else:
+		var camera = get_viewport().get_camera_3d()
+		if camera:
+			var forward_direction = -camera.global_transform.basis.z  # Direção da câmera para frente
+			forward_direction.y = 0  # Remove a inclinação vertical se não tiver alvo
+			shoot_direction = forward_direction.normalized()
+			print("📌 🔄 O tiro segue a câmera na direção correta:", shoot_direction)
+		else:
+			# Se não houver câmera, atira para frente do personagem
+			shoot_direction = -global_transform.basis.z
+			print("⚠️ Nenhuma câmera detectada! Disparando reto para frente.")
 
-	# **Aplica a direção ao projétil**
-	projectile.set_velocity(shoot_direction * 50)  # 🔥 Agora o projétil sai rápido e reto
+	# **🔥 Aplica velocidade ao projétil**
+	projectile.set_velocity(shoot_direction * 50)
 
-	# Debug de posição e velocidade
+	# Adiciona o projétil à cena
+	get_parent().add_child(projectile)
+
+	# Debugs
 	print("📌 Projétil POSIÇÃO inicial:", projectile.global_transform.origin)
 	print("📌 Projétil VELOCIDADE inicial:", shoot_direction * 50)
+	print("📌 Direção final do tiro:", shoot_direction)
 
-	# Configurações do projétil
-	projectile.damage = 1
-	projectile.scale = Vector3(1, 1, 1)
-
-	# Ignora colisões com o jogador
-	if projectile.has_method("add_exception"):
-		projectile.add_exception(self)
-		print("🚫 Projétil agora ignora colisões com o jogador.")
-
-	# Reseta cooldown
+	# Define o cooldown do disparo
 	time_since_last_shot = shoot_cooldown
-
-
 
 func _on_projectile_body_entered(body):
 	if body.name == "HikaruEvil":  # Verifica se o objeto atingido é o Hikaru
@@ -839,6 +832,9 @@ func shoot_charged_projectile():
 		var projectile = charged_projectile_scene.instantiate()
 
 		# Define a origem do tiro dependendo do modo de visão
+		var shoot_direction: Vector3 = Vector3.ZERO
+
+		### **🟢 Modo Primeira Pessoa**
 		if is_first_person_active:
 			var camera = get_viewport().get_camera_3d()
 			if camera:
@@ -849,19 +845,35 @@ func shoot_charged_projectile():
 					projectile.set_target(current_target)  # 🔥 Torna o tiro teleguiado
 				else:
 					# Direção da câmera caso não tenha alvo
-					var shoot_direction = -camera.global_transform.basis.z.normalized()
-					projectile.set_velocity(shoot_direction)
+					shoot_direction = -camera.global_transform.basis.z.normalized()
+		
+		### **🔵 Modo Terceira Pessoa**
 		else:
-			# Caso não esteja em primeira pessoa, usa a lógica padrão
+			# Origem do tiro na posição do personagem
 			projectile.global_transform.origin = shoot_origin.global_transform.origin
 
+			# **🔥 Se há um alvo, o projétil segue ele**
 			if current_target and current_target.is_inside_tree():
 				projectile.set_target(current_target)  # 🔥 Mantém o alvo para seguir!
 			else:
-				var shoot_direction = last_direction
-				shoot_direction.y = 0
-				shoot_direction = shoot_direction.normalized()
-				projectile.set_velocity(shoot_direction)
+				# **🔥 Dispara na direção da câmera SEM INCLINAR O TIRO PARA CIMA OU PARA BAIXO**
+				var camera = get_viewport().get_camera_3d()
+				if camera:
+					var forward_direction = -camera.global_transform.basis.z  # Direção da câmera para frente
+					forward_direction.y = 0  # Remove a inclinação vertical
+					shoot_direction = forward_direction.normalized()
+					print("📌 🔄 Tiro carregado segue a câmera:", shoot_direction)
+				else:
+					# Se não houver câmera, atira para frente do personagem
+					shoot_direction = -global_transform.basis.z
+					print("⚠️ Nenhuma câmera detectada! Disparando reto para frente.")
+
+		# **🔥 Garante que o tiro vá sempre para frente sem desvio vertical**
+		shoot_direction.y = 0
+		shoot_direction = shoot_direction.normalized()
+
+		# **Aplica velocidade ao projétil carregado**
+		projectile.set_velocity(shoot_direction * 50)
 
 		# Configurações do projétil carregado
 		projectile.damage = 5
@@ -869,6 +881,11 @@ func shoot_charged_projectile():
 
 		# Adiciona o projétil à cena
 		get_parent().add_child(projectile)
+
+		# Debugs
+		print("📌 Projétil Carregado POSIÇÃO inicial:", projectile.global_transform.origin)
+		print("📌 Projétil Carregado VELOCIDADE inicial:", shoot_direction * 50)
+		print("📌 Direção final do tiro carregado:", shoot_direction)
 
 		# Reseta cooldown e tempo de carga
 		time_since_last_shot = shoot_cooldown

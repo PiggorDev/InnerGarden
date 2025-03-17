@@ -25,25 +25,28 @@ func _input(event):
 		toggle_camera_mode()
 
 func toggle_camera_mode():
-	# Verifica qual personagem está ativo e qual câmera deve ser usada
-	var active_camera = get_active_camera()
-
-	# Debug para ver se a câmera está correta
-	print("📸 Libu Camera:", libu_camera)
-	print("📸 Vanessa Camera:", character_switch.vanessa_camera)
-	print("🎮 Personagem Atual:", character_switch.current_character)
-
-	if active_camera == null:
-		print("⚠️ Erro: Câmera do personagem ativo não encontrada!")
+	var player = get_parent().get_node_or_null("Libu")  # Pega o nó do jogador
+	if player == null:
+		print("⚠️ Erro: Nenhum jogador encontrado!")
 		return
 
 	# Alterna entre os modos de câmera (Normal → Side Scroll → Primeira Pessoa)
 	current_camera_mode = (current_camera_mode + 1) % 3  
 	update_camera_state()
 
+	# Atualiza corretamente a variável do jogador
+	player.is_first_person_active = (current_camera_mode == 2)
+
 	print("🎥 Modo da câmera alterado para:", current_camera_mode)
+	print("🎥 is_first_person_active AGORA:", player.is_first_person_active)
+
 
 func update_camera_state():
+	var player = get_parent().get_node_or_null("Libu")
+	if player == null:
+		print("⚠️ Erro: Nenhum jogador encontrado!")
+		return
+
 	var active_camera = get_active_camera()
 	if active_camera == null:
 		print("⚠️ Erro: Nenhuma câmera ativa encontrada!")
@@ -53,16 +56,21 @@ func update_camera_state():
 	if current_camera_mode == 0:  # Modo Normal (Terceira Pessoa)
 		active_camera.call("deactivate_side_scroll")
 		active_camera.call("deactivate_first_person")
+		player.is_first_person_active = false  # 🔥 Atualiza corretamente!
 		crosshair.visible = false  # Esconde a mira
+
 	elif current_camera_mode == 1:  # Modo Side Scroll
 		active_camera.call("activate_side_scroll")
+		player.is_first_person_active = false
 		crosshair.visible = false  # Esconde a mira
+
 	elif current_camera_mode == 2:  # Modo Primeira Pessoa
-		active_camera.call("activate_first_person")  # Agora chamando corretamente
+		active_camera.call("activate_first_person")
+		player.is_first_person_active = true  # 🔥 Ativa corretamente!
 		crosshair.visible = true  # Ativa a mira
 
-	# Sincroniza o estado com o sistema de troca de personagem
-	character_switch.sync_camera_state(current_camera_mode)
+	print("🎥 Novo estado da câmera:", current_camera_mode)
+	print("🎥 is_first_person_active AGORA:", player.is_first_person_active)
 
 func get_active_camera():
 	# Retorna a câmera do personagem ativo
@@ -70,4 +78,10 @@ func get_active_camera():
 		return libu_camera
 	elif character_switch.current_character == 1:  # Se for a Vanessa
 		return character_switch.vanessa_camera  # Certifique-se de que `vanessa_camera` está correto
+	return null
+	
+func get_player():
+	var players = get_tree().get_nodes_in_group("Player")
+	if players.size() > 0:
+		return players[0]  # Retorna o primeiro jogador encontrado
 	return null

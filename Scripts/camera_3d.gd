@@ -14,7 +14,6 @@ extends Camera3D
 @onready var camera_pivot = get_parent()
 
 var is_side_scroll_active: bool = false
-var is_first_person_active: bool = false
 var transitioning: bool = false
 var saved_offset_distance: float
 var saved_camera_position: Vector3
@@ -22,19 +21,27 @@ var saved_camera_rotation: Vector3
 var target_position: Vector3
 var transition_progress: float = 0.0
 var is_camera_locked: bool = false
+var is_first_person_active: bool = false:
+	set(value):
+		print("🚨 is_first_person_active mudou! NOVO VALOR:", value, " | Chamado por:", get_stack())
+		is_first_person_active = value
 
 
 func _process(delta):
-
-	if is_side_scroll_active:
-		_update_side_scroll_position()
-		return
+	print("🎥 Estado Atual da Câmera - FPS Ativo?", is_first_person_active)
 
 	if is_first_person_active:
+		print("✅ FPS ATIVO - NÃO DEVE ALTERAR")
 		_update_first_person_camera()
 		return
 
+	if is_side_scroll_active:
+		print("⚠️ Modo Side Scroll está ativo, pode estar interferindo")
+		_update_side_scroll_position()
+		return
+
 	if transitioning:
+		print("🔄 Transição de câmera está rodando, pode ser isso")
 		_update_transition(delta)
 	else:
 		_update_camera_position()
@@ -70,14 +77,14 @@ func _update_side_scroll_position():
 	if not player:
 		return
 
-	var side_scroll_target_position = player.global_transform.origin + side_scroll_offset
-	side_scroll_target_position.z = global_transform.origin.z  
-	global_transform.origin = global_transform.origin.lerp(side_scroll_target_position, 0.15)
-	global_transform.basis = Basis(Vector3(0, 1, 0), deg_to_rad(0))
+	# 🔹 Centraliza a câmera na Libu usando side_scroll_offset
+	global_transform.origin = player.global_transform.origin + side_scroll_offset
 
-	if camera_pivot:
-		camera_pivot.rotation_degrees = Vector3.ZERO
-		camera_pivot.global_transform.origin = player.global_transform.origin
+	# 🔹 Garante que a rotação fique fixa no Side Scroll
+	rotation_degrees = Vector3(0, side_scroll_rotation_angle, 0)
+
+	# 🔹 Evita qualquer desvio de posição no eixo Z
+	global_transform.origin.z = player.global_transform.origin.z
 
 func _update_transition(delta):
 	transition_progress += delta / transition_time
@@ -115,7 +122,9 @@ func activate_side_scroll():
 		force_update_transform()
 
 		# 🔹 **Desativa qualquer interpolação automática da câmera**
-		_disable_camera_updates()
+		if not is_first_person_active:  
+			_disable_camera_updates()  # ✅ Apenas desativa se NÃO estiver no modo FPS
+
 
 		# 🔹 Captura o mouse apenas para cliques, sem movimentação de câmera
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -134,13 +143,18 @@ func deactivate_side_scroll():
 
 ### 🔥 **FPS (Primeira Pessoa)**
 func activate_first_person():
-	if is_first_person_active:
-		return
+	print("🎥 Ativando Modo Primeira Pessoa! [ANTES] is_first_person_active:", is_first_person_active)
 
+	# 🔹 FORÇA a ativação do modo FPS
 	is_first_person_active = true
+
+	print("✅ [DEPOIS] is_first_person_active AGORA ESTÁ:", is_first_person_active)  # Debug
+
+	# 🔹 Desativa outros modos
 	is_side_scroll_active = false
 	transitioning = false
 
+	# 🔹 Salva a posição da câmera
 	saved_camera_position = global_transform.origin
 	saved_camera_rotation = rotation_degrees
 
@@ -151,11 +165,23 @@ func activate_first_person():
 	# 🔹 Ativa captura total do mouse
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
+
 func deactivate_first_person():
+	
+	print("🚨 Desativando Primeira Pessoa! is_first_person_active será FALSE")
+	is_first_person_active = false
+	
+	print("🚨 deactivate_first_person() FOI CHAMADO!")
+	is_first_person_active = false
+	print("🚨 ALERTA! is_first_person_active foi ALTERADO PARA FALSE AQUI!", " CHAMADO POR: ", get_stack())
+	print("⚠️ is_first_person_active foi ALTERADO PARA FALSE aqui!")
+	print("🚨 is_first_person_active AGORA ESTÁ:", is_first_person_active)  # DEBUG
+
 	if not is_first_person_active:
 		return
 
-	is_first_person_active = false
+	is_first_person_active = false 
+	print("🚨 ALERTA! is_first_person_active foi ALTERADO PARA FALSE AQUI!", " CHAMADO POR: ", get_stack())
 	transitioning = true
 	transition_progress = 0.0
 
@@ -179,9 +205,11 @@ func _update_first_person_camera():
 # 🚀 **Função para desativar atualizações automáticas da câmera no Side Scroll**
 func _disable_camera_updates():
 	transitioning = false  # Evita qualquer transição automática
-	is_first_person_active = false  # Certifica que não está em primeira pessoa
 	is_camera_locked = true  # Bloqueia outras atualizações
 
 	# **Desativa qualquer função que possa sobrescrever a rotação**
 	set_process(false)
 	set_physics_process(false)
+
+	# 🚀 Removemos is_first_person_active = false para evitar resetar a câmera FPS!
+	print("⚠️ _disable_camera_updates() chamado, mas FPS não será alterado automaticamente.")
