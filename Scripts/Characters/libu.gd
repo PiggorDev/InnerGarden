@@ -19,9 +19,9 @@ extends CharacterBody3D
 # Velocidades
 
 
-@export var walk_speed: float = 5.0  # Velocidade ao andar normalmente
-@export var run_speed: float = 10.0
-@export var gravity: float = -20.0
+@export var walk_speed: float = 12.0  # Velocidade ao andar normalmente
+@export var run_speed: float = 18.0
+@export var gravity: float = -30.0
 @export var jump_speed: float = 10.0
 @export var wall_jump_speed: float = 20.0
 @export var wall_jump_upward_speed: float = 15.0
@@ -30,7 +30,7 @@ extends CharacterBody3D
 @export var dash_cooldown: float = 3.0  # Cooldown do dash (ajustável no editor)
 @export var dash_duration: float = 0.3  # Duração do dash
 @export var dash_multiplier: float = 2.0  # Multiplicador de velocidade para o dash
-@export var wall_jump_horizontal_force: float = 15.0  # Força horizontal aplicada no Wall Jump
+@export var wall_jump_horizontal_force: float = -15.0  # Força horizontal aplicada no Wall Jump
 @export var wall_jump_upward_force: float = 15.0  # Força vertical aplicada no Wall Jump
 @export var wall_jump_max_angle: float = 75.0  # Ângulo máximo para considerar a parede escalável (em graus)
 @export var wall_jump_restrict_mode: int = 0  # Modo de restrição do Wall Jump
@@ -40,18 +40,17 @@ extends CharacterBody3D
 @export var fall_gravity_multiplier: float = 1.2  # Gravidade aumentada durante a queda
 @export var umbrella_jump_boost: float = 100.0  # Força do pulo do guarda-chuva
 
-@export var acceleration_time: float = 0.3  # Tempo para acelerar ao correr
-@export var deceleration_time: float = 0.3  # Tempo para desacelerar ao soltar o botão de correr
+
 @export var stop_time: float = 0.15  # Tempo para parar completamente ao soltar os direcionais
 @export var max_speed: float = 10.0  # Velocidade máxima ao correr
 @export var friction_threshold: float = 0.1  # Velocidade mínima antes de parar completamente
 
-@export var dash_speed: float = 20.0  # Velocidade do dash (ajustável no editor)
+@export var dash_speed: float = 40.0  # Velocidade do dash (ajustável no editor)
 # Tiro
 @export var crosshair_scene: PackedScene
-@export var targeting_radius: float = 20.0
+@export var targeting_radius: float = 30.0
 @export var crosshair_distance_threshold: float = 0.2
-@export var shoot_cooldown: float = 0.5
+@export var shoot_cooldown: float = 0.1
 @export var projectile_scene: PackedScene
 @export var max_charge_time: float = 2.0
 @export var charged_projectile_scene: PackedScene
@@ -144,8 +143,7 @@ func _ready():
 	$Sprite3D/IteminHand.visible = false  # Item começa invisível
 	
 	# Calcula taxas de aceleração e desaceleração baseadas no tempo desejado
-	acceleration = (run_speed - walk_speed) / acceleration_time
-	deceleration = (run_speed - walk_speed) / deceleration_time
+
 	stop_deceleration = walk_speed / stop_time
 	calculate_player_height()  # Calcula a altura do jogador ao iniciar
 	hide_all_life_bars()
@@ -711,12 +709,17 @@ func shoot_projectile():
 			shoot_direction = -camera.global_transform.basis.z  # Direção da câmera para frente
 			print("📌 🔄 Projétil FPS saiu da câmera na direção:", shoot_direction)
 
+	# 🔴 **Modo Side Scroll** (Novo comportamento)
+	elif camera.is_side_scroll_active:
+		shoot_direction = last_direction.normalized()
+		print("📌 🔄 Side Scroll Ativo: O tiro segue a última direção de movimento:", shoot_direction)
+
 	# 🔵 **Modo Terceira Pessoa (Sem alvo)**
 	else:
 		var camera = get_viewport().get_camera_3d()
 		if camera:
 			var forward_direction = -camera.global_transform.basis.z  # Direção da câmera para frente
-			forward_direction.y = 0  # Remove a inclinação vertical se não tiver alvo
+			forward_direction.y = 0  # Remove inclinação vertical se não tiver alvo
 			shoot_direction = forward_direction.normalized()
 			print("📌 🔄 O tiro segue a câmera na direção correta:", shoot_direction)
 		else:

@@ -28,28 +28,24 @@ floor_block_on_wall = false
 floor_max_angle = 1.22173
 floor_snap_length = 1.0
 script = ExtResource("1_0isec")
-walk_speed = 12.0
-run_speed = 18.0
-gravity = -25.0
-coyote_time_duration = 0.25
-umbrella_jump_boost = 80.0
+run_speed = 17.0
 crosshair_scene = ExtResource("2_jh1w3")
-targeting_radius = 40.0
+crosshair_distance_threshold = 25.0
 projectile_scene = ExtResource("3_b0ant")
+max_charge_time = 0.6
 charged_projectile_scene = ExtResource("4_mhi7e")
+vertical_jump_boost = 25.0
 
 [node name="CameraPivot" type="Node3D" parent="."]
-transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0, 10, 10)
+transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0, 5.7749, 6.59025)
 script = ExtResource("5_2p8kj")
-sensitivity = 0.002
-min_pitch = -40.0
-max_pitch = 40.0
+min_pitch_fps = -180.0
+max_pitch_fps = 180.0
 
 [node name="LibuCamera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("player")]
 script = ExtResource("2_ibpu5")
 player = NodePath("../..")
-offset_distance = 8.0
-height = 3.5
+side_scroll_offset = Vector3(10, 2, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/LibuCamera3D"]
 transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)
@@ -84,7 +80,7 @@ render_priority = 4
 texture = ExtResource("6_rqcqd")
 
 [node name="IteminHand" type="Sprite3D" parent="Sprite3D"]
-transform = Transform3D(400, 0, 0, 0, 400, 9.53677e-06, 0, -9.53677e-06, 400, -121.543, 83.416, -15.4784)
+transform = Transform3D(400, 0, 0, 0, 400, 9.53677e-06, 0, -9.53677e-06, 400, -118.825, 98.2935, -14.2038)
 billboard = 2
 shaded = true
 alpha_cut = 1

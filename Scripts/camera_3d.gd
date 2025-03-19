@@ -25,7 +25,10 @@ var is_first_person_active: bool = false:
 	set(value):
 		print("🚨 is_first_person_active mudou! NOVO VALOR:", value, " | Chamado por:", get_stack())
 		is_first_person_active = value
-
+func _ready():
+	# 🔥 Garante que a câmera inicie na distância máxima de zoom out
+	offset_distance = 8.0  
+	_update_camera_position()
 
 func _process(delta):
 	print("🎥 Estado Atual da Câmera - FPS Ativo?", is_first_person_active)
@@ -72,19 +75,22 @@ func _input(event):
 			offset_distance = min(8.0, offset_distance + zoom_speed)
 		_update_camera_position()
 
-
 func _update_side_scroll_position():
 	if not player:
 		return
 
-	# 🔹 Centraliza a câmera na Libu usando side_scroll_offset
+	# 🔹 **FORÇA a posição exata no jogador**
 	global_transform.origin = player.global_transform.origin + side_scroll_offset
 
-	# 🔹 Garante que a rotação fique fixa no Side Scroll
-	rotation_degrees = Vector3(0, side_scroll_rotation_angle, 0)
+	# 🔹 **Força a rotação EXATA**
+	global_rotation_degrees = Vector3(0, side_scroll_rotation_angle, 0)
 
-	# 🔹 Evita qualquer desvio de posição no eixo Z
+	# 🔹 **Mantém o eixo Z sempre fixo**
 	global_transform.origin.z = player.global_transform.origin.z
+
+	# 🔹 **Evita qualquer movimentação indevida**
+	force_update_transform()
+
 
 func _update_transition(delta):
 	transition_progress += delta / transition_time
@@ -95,51 +101,78 @@ func _update_transition(delta):
 		transitioning = false
 
 func activate_side_scroll():
-	if not is_side_scroll_active:
-		is_side_scroll_active = true
-		transitioning = false  # Evita transições desnecessárias
+	print("🎥 FORÇANDO Side Scroll - Resetando tudo!")
 
-		# 🔹 Salva os valores antes de mudar para Side Scroll
-		saved_camera_position = global_transform.origin
-		saved_camera_rotation = camera_pivot.rotation_degrees
-		saved_offset_distance = offset_distance
+	if is_side_scroll_active:
+		return
 
-		# 🔹 Move a câmera diretamente para o offset do Side Scroll
-		global_transform.origin = player.global_transform.origin + side_scroll_offset
+	is_side_scroll_active = true
+	transitioning = false  # Evita transições desnecessárias
 
-		# 🔍 Depuração: Confirma se o ângulo está correto
-		print("🔄 Aplicando rotação Side Scroll com ângulo:", side_scroll_rotation_angle)
+	# 🔹 Salva os valores antes de mudar para Side Scroll
+	saved_camera_position = global_transform.origin
+	saved_camera_rotation = rotation_degrees
+	saved_offset_distance = offset_distance
 
-		# 🔹 Aplica a rotação diretamente na **câmera**
-		rotation_degrees = Vector3(0, side_scroll_rotation_angle, 0)
+	# 🔥 **ZERA COMPLETAMENTE A TRANSFORMAÇÃO PARA EVITAR RESÍDUOS**
+	global_transform = Transform3D.IDENTITY
+	rotation_degrees = Vector3.ZERO
 
-		# 🔹 **Se o camera_pivot estiver interferindo, reseta ele**
-		if camera_pivot:
-			camera_pivot.rotation_degrees = Vector3.ZERO
-			camera_pivot.global_transform.origin = player.global_transform.origin
+	# 🔥 **REMOVE QUALQUER MOVIMENTO INDESEJADO DO CameraPivot**
+	if camera_pivot:
+		camera_pivot.rotation_degrees = Vector3.ZERO
+		camera_pivot.global_transform.origin = player.global_transform.origin
+		camera_pivot.set_process(false)  # 🚫 Bloqueia a atualização do pivot
 
-		# 🔹 **Força a atualização da transformação**
-		force_update_transform()
+	# 🔥 **Força a posição EXATA do Side Scroll**
+	global_transform.origin = player.global_transform.origin + side_scroll_offset
 
-		# 🔹 **Desativa qualquer interpolação automática da câmera**
-		if not is_first_person_active:  
-			_disable_camera_updates()  # ✅ Apenas desativa se NÃO estiver no modo FPS
+	# 🔥 **Força a rotação EXATA para 90 graus**
+	global_rotation_degrees = Vector3(0, side_scroll_rotation_angle, 0)
 
+	# 🔹 **Garante que a câmera NÃO se mova no eixo Z**
+	global_transform.origin.z = player.global_transform.origin.z
 
-		# 🔹 Captura o mouse apenas para cliques, sem movimentação de câmera
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# 🔹 **Força a câmera a atualizar instantaneamente**
+	force_update_transform()
 
+	# 🔹 **Bloqueia outras atualizações para não sobrescrever**
+	is_camera_locked = true
+	set_process(false)
+
+	# 🔹 Captura o mouse apenas para cliques, sem movimentação de câmera
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+	print("✅ Side Scroll ativado com posição e rotação FIXAS!")
 
 func deactivate_side_scroll():
 	if not is_side_scroll_active:
 		return
 
+	print("🚨 Resetando Câmera - Saindo do Side Scroll!")
+
 	is_side_scroll_active = false
 	transitioning = true
 	transition_progress = 0.0
-	target_position = camera_pivot.global_transform.origin + Vector3(0, height, -offset_distance)
+
+	# **Restaura a posição e a rotação da câmera**
+	target_position = saved_camera_position
+	rotation_degrees = saved_camera_rotation
 	offset_distance = saved_offset_distance
+
+	# 🔹 **Reativa o CameraPivot**
+	if camera_pivot:
+		camera_pivot.set_process(true)  # 🔥 Reativa o pivot
+		camera_pivot.rotation_degrees = Vector3.ZERO
+
+	# 🔹 **Desbloqueia a câmera**
+	is_camera_locked = false
+	set_process(true)
+
+	# 🔹 **Captura o cursor novamente**
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	print("✅ Modo terceira pessoa restaurado corretamente!")
 
 ### 🔥 **FPS (Primeira Pessoa)**
 func activate_first_person():
@@ -167,39 +200,43 @@ func activate_first_person():
 
 
 func deactivate_first_person():
-	
 	print("🚨 Desativando Primeira Pessoa! is_first_person_active será FALSE")
-	is_first_person_active = false
-	
-	print("🚨 deactivate_first_person() FOI CHAMADO!")
-	is_first_person_active = false
-	print("🚨 ALERTA! is_first_person_active foi ALTERADO PARA FALSE AQUI!", " CHAMADO POR: ", get_stack())
-	print("⚠️ is_first_person_active foi ALTERADO PARA FALSE aqui!")
-	print("🚨 is_first_person_active AGORA ESTÁ:", is_first_person_active)  # DEBUG
 
+	# Garante que só executa se estiver realmente no modo primeira pessoa
 	if not is_first_person_active:
+		print("⚠️ Tentativa de desativar primeira pessoa quando já estava desativado.")
 		return
 
-	is_first_person_active = false 
-	print("🚨 ALERTA! is_first_person_active foi ALTERADO PARA FALSE AQUI!", " CHAMADO POR: ", get_stack())
+	# Define estado correto
+	is_first_person_active = false
 	transitioning = true
 	transition_progress = 0.0
 
+	print("🔄 Restaurando posição e rotação da câmera para terceira pessoa...")
 	target_position = saved_camera_position
 	rotation_degrees = saved_camera_rotation
 
-	# 🔹 Retorna o controle normal da câmera
+	# 🔹 Retorna o controle normal da câmera IMEDIATAMENTE sem precisar de input
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+	print("🎥 Cursor capturado e câmera retornando para terceira pessoa automaticamente!")
+
+	# Garante que a câmera volte para a posição correta
+	_update_camera_position()
+
+	print("✅ Modo terceira pessoa restaurado com sucesso!")
+
 func _update_first_person_camera():
 	if not player:
 		return  # Evita erro se o player não estiver definido
 
-	# 🔹 Define a posição da câmera para os "olhos" do jogador
+	# 🔹 Mantém a posição da câmera na altura dos olhos do jogador
 	global_transform.origin = player.global_transform.origin + Vector3(0, eye_height, 0)
 
-	# 🔹 A rotação da câmera segue a do jogador para manter um comportamento de FPS
-	global_transform.basis = player.global_transform.basis
+	# 🔥 O YAW (esquerda/direita) ainda segue a rotação do jogador
+	global_rotation_degrees.y = player.global_rotation_degrees.y  
+
+	# 🔥 O PITCH (cima/baixo) é independente e ajustado pelo input do mouse
+	global_rotation_degrees.x = clamp(global_rotation_degrees.x, -89, 89)
 
 
 # 🚀 **Função para desativar atualizações automáticas da câmera no Side Scroll**

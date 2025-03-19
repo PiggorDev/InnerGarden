@@ -848,9 +848,14 @@ transform = Transform3D(1.19209e-07, 0, 6.58653, 0, 0.977392, 0, -4.83479, 0, 2.
 
 [node name="Libu" parent="." instance=ExtResource("37_isg0k")]
 transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 28.9, -6.36366, -4.2)
-crosshair_distance_threshold = 0.2
-max_charge_time = 2.0
-vertical_jump_boost = 15.0
+walk_speed = null
+run_speed = null
+wall_jump_horizontal_force = null
+dash_speed = null
+crosshair_distance_threshold = null
+shoot_cooldown = null
+max_charge_time = null
+vertical_jump_boost = null
 
 [node name="CutsceneEloisa" parent="." instance=ExtResource("49_nuysx")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.8, -5.97361, -47.2)
