@@ -13,6 +13,9 @@ extends Camera3D
 
 @onready var camera_pivot = get_parent()
 
+var yaw: float = 0
+var pitch: float = 0
+
 var is_side_scroll_active: bool = false
 var transitioning: bool = false
 var saved_offset_distance: float
@@ -23,8 +26,13 @@ var transition_progress: float = 0.0
 var is_camera_locked: bool = false
 var is_first_person_active: bool = false:
 	set(value):
-		print("🚨 is_first_person_active mudou! NOVO VALOR:", value, " | Chamado por:", get_stack())
+		print("🚨 MODO FPS ATUALIZADO:", value)
 		is_first_person_active = value
+		first_person_toggled.emit(value)  # 🚀 **Emitindo o sinal**
+		
+signal first_person_toggled(active: bool)  # 📡 **Adicionando sinal**
+
+
 func _ready():
 	# 🔥 Garante que a câmera inicie na distância máxima de zoom out
 	offset_distance = 8.0  
@@ -53,16 +61,40 @@ func _update_camera_position():
 	if not player or not camera_pivot:
 		return
 
-	camera_pivot.global_transform.origin = player.global_transform.origin
+	# 🔹 Obtém a posição do jogador
+	var player_position = player.global_transform.origin
+
+	# 🚀 **Ajuste para centralizar melhor a câmera**
+	var libu_center_offset = Vector3(0, player.scale.y * 3, 0)  # 🔥 Agora focando no tronco
+
+	# 🔹 Atualiza a posição do Camera Pivot (com o ajuste de altura)
+	camera_pivot.global_transform.origin = player_position + libu_center_offset
+
+	# 🔹 Direção da câmera (sempre para trás, baseado na rotação atual)
 	var direction = -camera_pivot.global_transform.basis.z.normalized()
+
+	# 🚀 **Aplica o Zoom corretamente, sempre focando o tronco da Libu**
 	global_transform.origin = camera_pivot.global_transform.origin + (direction * offset_distance)
+
+	# 🔹 **Garante que a câmera olhe diretamente para o tronco da Libu**
 	look_at(camera_pivot.global_transform.origin, Vector3.UP)
+
 
 func _input(event):
 	# 🚫 Bloqueia qualquer influência do mouse caso esteja no Side Scroll
 	if is_side_scroll_active and (event is InputEventMouseMotion or event is InputEventMouseButton):
 		return  
 
+	if event is InputEventMouseMotion:
+		yaw -= event.relative.x * 0.1  # Sensibilidade do mouse
+
+		# 🔥 Aplica regras separadas para FPS e TPS
+		if is_first_person_active:
+			pitch -= event.relative.y * 0.1  # FPS tem mais liberdade
+			pitch = clamp(pitch, -89, 89)
+		else:
+			pitch -= event.relative.y * 0.1  # TPS tem restrições
+			pitch = clamp(pitch, -30, 50)
 	# 🚀 **Bloqueia cliques do mouse no modo de primeira pessoa**
 	if is_first_person_active and event is InputEventMouseButton:
 		return  # 🔥 Sai da função sem alterar nada se estiver em primeira pessoa
@@ -228,7 +260,14 @@ func deactivate_first_person():
 func _update_first_person_camera():
 	if not player:
 		return  # Evita erro se o player não estiver definido
+	
+	# 🔹 Define a posição nos "olhos" do jogador
+	global_transform.origin = player.global_transform.origin + Vector3(0, eye_height, 0)
 
+	# 🔹 Aplica a rotação correta
+	global_rotation_degrees.x = pitch
+	
+	global_rotation_degrees.y = yaw
 	# 🔹 Mantém a posição da câmera na altura dos olhos do jogador
 	global_transform.origin = player.global_transform.origin + Vector3(0, eye_height, 0)
 
@@ -250,3 +289,14 @@ func _disable_camera_updates():
 
 	# 🚀 Removemos is_first_person_active = false para evitar resetar a câmera FPS!
 	print("⚠️ _disable_camera_updates() chamado, mas FPS não será alterado automaticamente.")
+
+func _update_camera_rotation():
+	if is_first_person_active:
+		# FPS: controla o pitch da câmera separadamente
+		global_rotation_degrees.x = pitch
+		global_rotation_degrees.y = yaw
+	else:
+		# TPS: controla o yaw da câmera pelo CameraPivot, mas mantém o pitch limitado
+		if camera_pivot:
+			camera_pivot.rotation_degrees.y = yaw
+			camera_pivot.rotation_degrees.x = pitch

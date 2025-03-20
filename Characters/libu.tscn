@@ -19,28 +19,29 @@ size = Vector3(1, 1.7, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6gcgl"]
 margin = 0.0
-radius = 1.5
-height = 8.0
+radius = 4.37261
+height = 29.7808
 
 [node name="Libu" type="CharacterBody3D" groups=["Player"]]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 floor_block_on_wall = false
 floor_max_angle = 1.22173
 floor_snap_length = 1.0
 script = ExtResource("1_0isec")
 run_speed = 17.0
+wall_jump_upward_speed = 25.0
+wall_jump_force = 20.0
+wall_jump_upward_force = 20.0
+umbrella_jump_boost = 25.0
 crosshair_scene = ExtResource("2_jh1w3")
 crosshair_distance_threshold = 25.0
 projectile_scene = ExtResource("3_b0ant")
-max_charge_time = 0.6
+max_charge_time = 0.5
 charged_projectile_scene = ExtResource("4_mhi7e")
 vertical_jump_boost = 25.0
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(4, 0, 0, 0, 2.82843, 2.82843, 0, -2.82843, 2.82843, 0, 5.7749, 6.59025)
 script = ExtResource("5_2p8kj")
-min_pitch_fps = -180.0
-max_pitch_fps = 180.0
 
 [node name="LibuCamera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("player")]
 script = ExtResource("2_ibpu5")
@@ -67,7 +68,7 @@ transform = Transform3D(1, 0, 0, 0, 0.707107, -0.707106, 0, 0.707106, 0.707107, 
 shape = SubResource("BoxShape3D_fnhhq")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(0.017, 0, 0, 0, 0.017, 0, 0, 0, 0.017, 0, 0.157499, 0)
+transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, 0, 3.54678, 0)
 extra_cull_margin = 1.0
 gi_mode = 2
 pixel_size = 0.2
@@ -80,7 +81,7 @@ render_priority = 4
 texture = ExtResource("6_rqcqd")
 
 [node name="IteminHand" type="Sprite3D" parent="Sprite3D"]
-transform = Transform3D(400, 0, 0, 0, 400, 9.53677e-06, 0, -9.53677e-06, 400, -118.825, 98.2935, -14.2038)
+transform = Transform3D(450, 0, 0, 0, 450, 1.07289e-05, 0, -1.07289e-05, 450, -118.825, 144.291, 15.5288)
 billboard = 2
 shaded = true
 alpha_cut = 1
@@ -88,27 +89,29 @@ texture_filter = 2
 render_priority = 1
 
 [node name="ShootOrigin" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5847, 0)
 
 [node name="LibuShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.0908351, 3.69238, 0)
 shape = SubResource("CapsuleShape3D_6gcgl")
 
 [node name="WallRayCastFront" type="RayCast3D" parent="."]
-transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, -3.47826, 0)
+transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, 0.0308695, 0)
 debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
 debug_shape_thickness = 5
 
 [node name="WallRayCastRight" type="RayCast3D" parent="."]
-transform = Transform3D(-1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, 0, 0, 2.3, 0, -3.47826, 0)
+transform = Transform3D(-1.00536e-07, -2.3, 0, 2.3, -1.00536e-07, 0, 0, 0, 2.3, 0, 0.0308695, 0)
 debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
 debug_shape_thickness = 5
 
 [node name="WallRayCastLeft" type="RayCast3D" parent="."]
-transform = Transform3D(1.00536e-07, 2.3, 3.4729e-07, 2.3, -1.00536e-07, -4.44091e-15, 1.07396e-14, 3.4729e-07, -2.3, 0, -3.47826, 0)
+transform = Transform3D(1.00536e-07, 2.3, 3.4729e-07, 2.3, -1.00536e-07, -4.4409e-15, 1.07396e-14, 3.4729e-07, -2.3, 0, 0.0308695, 0)
 debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
 debug_shape_thickness = 5
 
 [node name="WallRayCastBack" type="RayCast3D" parent="."]
-transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, 2.3, 0, -2.3, -1.00536e-07, 0, -3.47826, 0)
+transform = Transform3D(2.3, 0, 0, 0, -1.00536e-07, 2.3, 0, -2.3, -1.00536e-07, 0, 0.0308695, 0)
 debug_shape_custom_color = Color(0.82204, 0.563714, 0.271988, 1)
 debug_shape_thickness = 5
 
@@ -119,7 +122,7 @@ light_energy = 3.134
 light_indirect_energy = 3.804
 
 [node name="ShadowHandler" type="Node3D" parent="."]
-transform = Transform3D(1.2, 0, 0, 0, -5.24537e-08, 1.2, 0, -1.2, -5.24537e-08, 0, -3.6, 0)
+transform = Transform3D(0.91, 0, 0, 0, -2.95489e-08, 1.325, 0, -0.676, -5.79176e-08, 0, -0.116151, 0)
 script = ExtResource("4_6pc02")
 shadow_texture = ExtResource("5_xd0lu")
 max_height = 20.0
@@ -132,7 +135,7 @@ hit_from_inside = true
 collide_with_areas = true
 
 [node name="ShadowSprite" type="Sprite3D" parent="ShadowHandler"]
-transform = Transform3D(1, 0, 0, 0, 1, -3.55271e-15, 0, 3.55271e-15, 1, 0, 0, 0)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, -8.88178e-16, 0, 8.88178e-16, 0.25, 0, 0, 0)
 modulate = Color(0.399298, 5.29198e-05, 0.36213, 0.74902)
 axis = 1
 billboard = 2
@@ -140,7 +143,7 @@ shaded = true
 texture = ExtResource("6_j0tps")
 
 [node name="eyes" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.384531, 0)
 
 [connection signal="body_entered" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_entered_area"]
 [connection signal="body_exited" from="CameraPivot/LibuCamera3D/Transparency1" to="CameraPivot/LibuCamera3D" method="_on_body_exited_area"]
