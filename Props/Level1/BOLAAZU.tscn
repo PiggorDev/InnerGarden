@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bi45mg3omibd3" path="res://Sprites/BIGBoom.png" id="3_mwnc1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_a3lie"]
+radius = 0.578442
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p6d6h"]
 albedo_color = Color(0.545371, 0.709051, 1, 1)
@@ -26,6 +27,7 @@ scale_amount_min = 272.84
 scale_amount_max = 272.84
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
 texture = ExtResource("3_mwnc1")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]

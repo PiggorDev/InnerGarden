@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=4 uid="uid://jqm88ic58orn"]
+[gd_scene load_steps=76 format=4 uid="uid://jqm88ic58orn"]
 
 [ext_resource type="Texture2D" uid="uid://dgf2vixtti047" path="res://Sky/kloofendal_48d_partly_cloudy_puresky_4k.exr" id="1_a0aa3"]
 [ext_resource type="Script" uid="uid://7o2tnedpxxgf" path="res://canvas_layer.gd" id="1_l0vgl"]
@@ -56,6 +56,7 @@
 [ext_resource type="Texture2D" uid="uid://hn10obnmeogi" path="res://Sprites/DayNight.png" id="53_omxcq"]
 [ext_resource type="Environment" uid="uid://d2rcrrsyblm70" path="res://Sky/day_environment.tres" id="54_4eenm"]
 [ext_resource type="PackedScene" uid="uid://cl2ok33anh807" path="res://Mechanics/door.tscn" id="54_tjt50"]
+[ext_resource type="AudioStream" uid="uid://cc83ow81fni0j" path="res://music/Iframe 午安 [xv3yt0XBcvM].mp3" id="57_8o1vc"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lb4bl"]
 panorama = ExtResource("1_a0aa3")
@@ -869,6 +870,12 @@ texture = ExtResource("53_omxcq")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DayNightSwitch/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35651, 2.9901, 1.04618)
 shape = SubResource("BoxShape3D_4eenm")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("57_8o1vc")
+volume_db = -10.0
+autoplay = true
+parameters/looping = true
 
 [connection signal="body_entered" from="block-moving2/Area3D" to="block-moving2" method="_on_body_entered"]
 [connection signal="body_exited" from="block-moving2/Area3D" to="block-moving2" method="_on_body_exited"]
