@@ -10,6 +10,8 @@ extends Camera3D
 @export var transition_time: float = 0.4
 @export var eye_height: float = 1.5  
 @export var side_scroll_rotation_angle: float = 90.0  # 🌀 Ângulo de rotação da câmera no modo Side Scroll
+@export var max_offset_distance: float = 10.0
+@export var min_offset_distance: float = 2.0
 
 @onready var camera_pivot = get_parent()
 
@@ -35,8 +37,9 @@ signal first_person_toggled(active: bool)  # 📡 **Adicionando sinal**
 
 func _ready():
 	# 🔥 Garante que a câmera inicie na distância máxima de zoom out
-	offset_distance = 8.0  
+	offset_distance = max_offset_distance
 	_update_camera_position()
+
 
 func _process(delta):
 	print("🎥 Estado Atual da Câmera - FPS Ativo?", is_first_person_active)
@@ -95,6 +98,7 @@ func _input(event):
 		else:
 			pitch -= event.relative.y * 0.1  # TPS tem restrições
 			pitch = clamp(pitch, -30, 50)
+
 	# 🚀 **Bloqueia cliques do mouse no modo de primeira pessoa**
 	if is_first_person_active and event is InputEventMouseButton:
 		return  # 🔥 Sai da função sem alterar nada se estiver em primeira pessoa
@@ -102,10 +106,11 @@ func _input(event):
 	# 🎮 Controle de Zoom (rodinha do mouse) - Somente se NÃO estiver no modo Side Scroll
 	if event is InputEventMouseButton and not is_side_scroll_active:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			offset_distance = max(2.0, offset_distance - zoom_speed)
+			offset_distance = clamp(offset_distance - zoom_speed, min_offset_distance, max_offset_distance)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			offset_distance = min(8.0, offset_distance + zoom_speed)
+			offset_distance = clamp(offset_distance + zoom_speed, min_offset_distance, max_offset_distance)
 		_update_camera_position()
+
 
 func _update_side_scroll_position():
 	if not player:

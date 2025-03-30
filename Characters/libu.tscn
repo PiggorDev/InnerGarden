@@ -46,6 +46,7 @@ script = ExtResource("5_2p8kj")
 [node name="LibuCamera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("player")]
 script = ExtResource("2_ibpu5")
 player = NodePath("../..")
+offset_distance = 15.0
 side_scroll_offset = Vector3(10, 2, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/LibuCamera3D"]
