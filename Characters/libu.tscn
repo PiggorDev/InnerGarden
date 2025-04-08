@@ -47,9 +47,10 @@ max_pitch_tpp = 35.0
 [node name="LibuCamera3D" type="Camera3D" parent="CameraPivot" node_paths=PackedStringArray("player")]
 script = ExtResource("2_ibpu5")
 player = NodePath("../..")
-offset_distance = 12.0
-height = 200.0
+offset_distance = 10.0
+height = 6.0
 side_scroll_offset = Vector3(10, 2, 0)
+max_offset_distance = 9.0
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/LibuCamera3D"]
 transform = Transform3D(1, 0, 0, 0, -2.61468, -34.8668, 0, 29.8858, -3.05046, 0, 0, 0)

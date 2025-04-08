@@ -2,7 +2,7 @@ extends Camera3D
 
 # 📌 Parâmetros da câmera
 @export var player: CharacterBody3D
-@export var offset_distance: float = 10.0
+@export var offset_distance: float = 8.0
 @export var height: float = 5.0
 @export var transparency: float = 0.4
 @export var zoom_speed: float = 0.5  
@@ -10,8 +10,10 @@ extends Camera3D
 @export var transition_time: float = 0.4
 @export var eye_height: float = 1.5  
 @export var side_scroll_rotation_angle: float = 90.0  # 🌀 Ângulo de rotação da câmera no modo Side Scroll
-@export var max_offset_distance: float = 10.0
+@export var max_offset_distance: float = 8.0
 @export var min_offset_distance: float = 2.0
+@export var horizontal_offset: float = -2.0
+
 
 @onready var camera_pivot = get_parent()
 
@@ -36,10 +38,9 @@ signal first_person_toggled(active: bool)  # 📡 **Adicionando sinal**
 
 
 func _ready():
-	# 🔥 Garante que a câmera inicie na distância máxima de zoom out
-	offset_distance = max_offset_distance
+	# 🔥 Garante que o offset inicial esteja dentro dos limites definidos
+	offset_distance = clamp(offset_distance, min_offset_distance, max_offset_distance)
 	_update_camera_position()
-
 
 func _process(delta):
 	print("🎥 Estado Atual da Câmera - FPS Ativo?", is_first_person_active)
@@ -64,24 +65,37 @@ func _update_camera_position():
 	if not player or not camera_pivot:
 		return
 
-	# 🔹 Obtém a posição do jogador
 	var player_position = player.global_transform.origin
 
-	# 🚀 **Ajuste para centralizar melhor a câmera**
-	var libu_center_offset = Vector3(0, player.scale.y * 3, 0)  # 🔥 Agora focando no tronco
+	# 🔹 Garante que offset_distance está dentro do intervalo correto
+	offset_distance = clamp(offset_distance, min_offset_distance, max_offset_distance)
 
-	# 🔹 Atualiza a posição do Camera Pivot (com o ajuste de altura)
+	# 🔹 Calcula o fator de interpolação com base no zoom (0 = perto, 1 = longe)
+	var t: float = inverse_lerp(min_offset_distance, max_offset_distance, offset_distance)
+
+	# 🔹 Altura dinâmica: no zoom in foca nos olhos, no zoom out sobe mais
+	var dynamic_height: float = lerp(eye_height, height, t)
+
+	# 🔹 Corrige possível exagero na escala
+	var scale_factor = clamp(player.scale.y, 0.5, 2.0)
+
+	# 🔹 Offset proporcional ajustado
+	var libu_center_offset = Vector3(0, dynamic_height * scale_factor, 0)
+
+	# 🔹 Atualiza o pivot da câmera
 	camera_pivot.global_transform.origin = player_position + libu_center_offset
 
-	# 🔹 Direção da câmera (sempre para trás, baseado na rotação atual)
+	# 🔹 Direção da câmera
 	var direction = -camera_pivot.global_transform.basis.z.normalized()
 
-	# 🚀 **Aplica o Zoom corretamente, sempre focando o tronco da Libu**
-	global_transform.origin = camera_pivot.global_transform.origin + (direction * offset_distance)
+# 🔹 Calcula o offset horizontal suavizado baseado no zoom (0 = perto, 1 = longe)
+	var dynamic_horizontal_offset = lerp(0.0, horizontal_offset, t)
 
-	# 🔹 **Garante que a câmera olhe diretamente para o tronco da Libu**
+# 🔹 Aplica o zoom e o deslocamento horizontal
+	global_transform.origin = camera_pivot.global_transform.origin + (direction * offset_distance) + (camera_pivot.global_transform.basis.x * dynamic_horizontal_offset)
+
+	# 🔹 Garante que a câmera olhe para a Libu
 	look_at(camera_pivot.global_transform.origin, Vector3.UP)
-
 
 func _input(event):
 	# 🚫 Bloqueia qualquer influência do mouse caso esteja no Side Scroll
@@ -103,12 +117,13 @@ func _input(event):
 	if is_first_person_active and event is InputEventMouseButton:
 		return  # 🔥 Sai da função sem alterar nada se estiver em primeira pessoa
 
-	# 🎮 Controle de Zoom (rodinha do mouse) - Somente se NÃO estiver no modo Side Scroll
+# 🎮 Controle de Zoom (rodinha do mouse) - Somente se NÃO estiver no modo Side Scroll
 	if event is InputEventMouseButton and not is_side_scroll_active:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			offset_distance = clamp(offset_distance - zoom_speed, min_offset_distance, max_offset_distance)
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			offset_distance = clamp(offset_distance + zoom_speed, min_offset_distance, max_offset_distance)
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and offset_distance > min_offset_distance:
+			offset_distance = max(offset_distance - zoom_speed, min_offset_distance)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and offset_distance < max_offset_distance:
+			offset_distance = min(offset_distance + zoom_speed, max_offset_distance)
+	
 		_update_camera_position()
 
 
