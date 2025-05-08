@@ -48,7 +48,7 @@ max_pitch_tpp = 35.0
 script = ExtResource("2_ibpu5")
 player = NodePath("../..")
 offset_distance = 10.0
-height = 6.0
+height = 4.0
 side_scroll_offset = Vector3(10, 2, 0)
 max_offset_distance = 9.0
 
